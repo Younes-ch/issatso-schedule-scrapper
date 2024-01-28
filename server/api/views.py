@@ -5,16 +5,18 @@ from rest_framework.decorators import api_view
 from issatso.models import Group
 
 from .serializers import GroupSerializer
-from .helpers import get_group_names, get_group_timetable
-import threading
+from .helpers import get_group_names, update_group
 
 # Create your views here.
 
 @api_view(['GET'])
 def api_root(request):
-    return Response({
-        'groups': '/groups/',
-    })
+    return Response([
+        request.build_absolute_uri() +'groups/',
+        request.build_absolute_uri() + 'groups/names',
+        request.build_absolute_uri() + 'groups/<slug:pk>/',
+        request.build_absolute_uri() + 'groups/update',
+    ])
 
 @api_view(['GET'])
 def group_names(request):
@@ -49,17 +51,8 @@ def update_groups(request):
         group_names = get_group_names()
         if group_names:
             with ThreadPoolExecutor(max_workers=10) as executor:
-                executor.map(update_group_timetable, group_names)
-
+                executor.map(update_group, group_names)
             return HttpResponse(status=200)
         else:
             return HttpResponse(status=404)
 
-def update_group_timetable(group_name):
-    try:
-        group = Group.objects.get(pk=group_name)
-        group.timetable_html = get_group_timetable(group_name)
-        group.save()
-    except Group.DoesNotExist:
-        group = Group(name=group_name, timetable_html=get_group_timetable(group_name))
-        group.save()
