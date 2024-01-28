@@ -1,5 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from issatso.models import Group
@@ -52,7 +52,7 @@ def update_groups(request):
         if group_names:
             with ThreadPoolExecutor(max_workers=10) as executor:
                 executor.map(update_group, group_names)
-            return HttpResponse(status=200)
+            return JsonResponse({"status": "success"})
         else:
             return HttpResponse(status=404)
 
