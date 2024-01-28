@@ -37,7 +37,7 @@ def group_list(request):
 @api_view(['GET'])
 def group_detail(request, pk):
     try:
-        group = Group.objects.get(pk=pk)
+        group = Group.objects.get(pk=pk.upper())
     except Group.DoesNotExist:
         return HttpResponse(status=404)
     
@@ -52,7 +52,7 @@ def update_groups(request):
         if group_names:
             with ThreadPoolExecutor(max_workers=10) as executor:
                 executor.map(update_group, group_names)
-            return JsonResponse({"status": "success"})
-        else:
-            return HttpResponse(status=404)
+        return JsonResponse({"status": "success"})
+    else:
+        return HttpResponse(status=404)
 
