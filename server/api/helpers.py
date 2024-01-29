@@ -58,7 +58,8 @@ def extract_occupied_classrooms_from_timetable(group_instance: Group):
 
         if cells[0].text.strip() in weekdays:
             weekday = cells[0].text.strip()[2:]
-            occupied_classrooms_from_timetable[weekday] = {}
+            if not weekday in occupied_classrooms_from_timetable:
+                occupied_classrooms_from_timetable[weekday] = {}
             continue
 
         if cells[0].text.strip() in SESSIONS:
@@ -82,8 +83,8 @@ def extract_occupied_classrooms_from_remedial(group_instance: Group):
     for row in rows:
         cells = row.find_all('td')
 
-        date = cells[1].text.strip()
         weekday = cells[0].text.strip()
+        date = cells[1].text.strip()
         session = cells[2].text.strip()
         classroom = cells[5].text.strip()
         
