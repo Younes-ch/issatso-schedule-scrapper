@@ -9,6 +9,8 @@ urlpatterns = [
     path('groups/names', views.group_names, name='group_names'),
     path('groups/<slug:pk>/', views.group_detail, name='group_detail'),
     path('groups/update', views.update_groups),
+    path('classrooms/', views.classroom_list, name='classroom_list'),
+    path('classrooms/available/', views.available_classroom_list),
 ] 
 
 

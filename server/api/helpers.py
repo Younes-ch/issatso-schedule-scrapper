@@ -1,3 +1,4 @@
+from typing import Literal
 from dotenv import load_dotenv
 from bs4 import BeautifulSoup
 import datetime
@@ -10,7 +11,6 @@ from issatso.models import Group
 load_dotenv()
 
 # Stuff needed for ISSATSO API
-
 TOKEN = os.getenv('TOKEN')
 ISSATSO_GROUP_NAMES_URL = os.getenv('ISSATSO_API_URL') + 'groups/all/list'
 ISSATSO_TIMETABLE_URL = os.getenv('ISSATSO_API_URL') + 'student/timetable/'
@@ -20,7 +20,22 @@ headers = {
 }
 
 # Global variables
+WEEKDAYS = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"]
 SESSIONS = ["S1", "S2", "S3", "S4", "S4'", "S5", "S6"]
+CLASSROOMS = {
+        'Amphi: GOLLI Salem',  'Amphi: LAATIRI Mokhtar', 'B08-A', 'B09', 'B10',
+        'B16', 'F01', 'F02', 'F03', 'F05', 'G01', 'G02', 'G03', 'G04', 'G05',
+        'G06', 'G07', 'G08', 'G10', 'G12', 'G13', 'G14', 'G15', 'G16', 'G17',
+        'G18', 'G19', 'G20', 'G21', 'H01', 'H02', 'H03', 'H04', 'H05', 'H06',
+        'H07', 'H08', 'H09', 'H10', 'H11', 'H12', 'H13', 'H14', 'I-02', 'I-03',
+        'I-04', 'I-05', 'I-06', 'I-07', 'I-08', 'I-09', 'I-10', 'I-11', 'I-12',
+        'I-13', 'I-14', 'I-15', 'I-16', 'I-17', 'I-18', 'I-19', 'J05', 'J06', 'J07',
+        'J08', 'J09', 'K01', 'K02', 'K03', 'K04', 'K05', 'K06', 'K07', 'K08', 'K09',
+        'K10', 'K11', 'K12', 'K13', 'L01', 'L02', 'L03', 'L04', 'L05', 'L06', 'M01',
+        'M01-1', 'M01-2', 'M01-3', 'M02', 'M03', 'M04', 'M05', 'M06', 'M07', 'M08',
+        'M09', 'M10', 'M11', 'M12', 'M13', 'M14', 'M15', 'M16', 'M17', 'M18-1', 'M18-2'
+    }
+BLOCS = {classroom[0] for classroom in CLASSROOMS}
 
 def get_group_names():
     response = requests.get(ISSATSO_GROUP_NAMES_URL, headers=headers)
@@ -30,7 +45,7 @@ def get_group_names():
     else:
         return None
     
-def get_group_timetable(group_name):
+def get_group_timetable(group_name) -> str | None:
     response = requests.get(ISSATSO_TIMETABLE_URL + group_name, headers=headers)
     if response.status_code == 200:
         print("Getting timetable for " + group_name)
@@ -38,7 +53,7 @@ def get_group_timetable(group_name):
     else:
         return None
     
-def get_group_remedial(group_name):
+def get_group_remedial(group_name) -> str | None:
     response = requests.get(ISSATSO_REMEDIAL_URL + group_name, headers=headers)
     if response.status_code == 200:
         print("Getting remedial for " + group_name)
@@ -46,7 +61,7 @@ def get_group_remedial(group_name):
     else:
         return None
     
-def extract_occupied_classrooms_from_timetable(group_instance: Group):
+def extract_occupied_classrooms_from_timetable(group_instance: Group) -> str:
     weekdays = ["1-Lundi", "2-Mardi", "3-Mercredi", "4-Jeudi", "5-Vendredi", "6-Samedi"]
     occupied_classrooms_from_timetable = {}
     soup = BeautifulSoup(group_instance.timetable_html, 'html.parser')
@@ -72,7 +87,7 @@ def extract_occupied_classrooms_from_timetable(group_instance: Group):
             continue
     return json.dumps(occupied_classrooms_from_timetable)
 
-def extract_occupied_classrooms_from_remedial(group_instance: Group):
+def extract_occupied_classrooms_from_remedial(group_instance: Group) -> str:
     occupied_classrooms_from_remedial = {}
     soup = BeautifulSoup(group_instance.remedial_html, 'html.parser')
     table = soup.find('table')
@@ -105,7 +120,7 @@ def extract_occupied_classrooms_from_remedial(group_instance: Group):
 
     return json.dumps(occupied_classrooms_from_remedial)
 
-def merge_occupied_classrooms(occupied_classrooms_from_timetable, occupied_classrooms_from_remedial):
+def merge_occupied_classrooms(occupied_classrooms_from_timetable, occupied_classrooms_from_remedial) -> str:
     current_date = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=1))).strftime("%d/%m/%Y")
     occupied_classrooms = {}
     if current_date in occupied_classrooms_from_remedial:
@@ -121,9 +136,8 @@ def merge_occupied_classrooms(occupied_classrooms_from_timetable, occupied_class
         else:
             occupied_classrooms[weekday] = occupied_classrooms_from_timetable[weekday]
     return json.dumps(occupied_classrooms)
-
-    
-def update_group(group_name):
+   
+def update_group(group_name) -> None:
     try:
         group = Group.objects.get(pk=group_name)
     except Group.DoesNotExist:
@@ -134,3 +148,17 @@ def update_group(group_name):
     occupied_classrooms_from_remedial = json.loads(extract_occupied_classrooms_from_remedial(group))
     group.occupied_classrooms = merge_occupied_classrooms(occupied_classrooms_from_timetable, occupied_classrooms_from_remedial)
     group.save()
+
+def get_all_classrooms_occupied_by_a_group_in_a_day_and_session(
+        group: Group,
+        weekday: Literal["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"],
+        session: Literal["S1", "S2", "S3", "S4", "S4'", "S5", "S6"]
+    ) -> list[str]:
+    occupied_classrooms = json.loads(group.occupied_classrooms)
+    if weekday in occupied_classrooms:
+        if session in occupied_classrooms[weekday]:
+            return occupied_classrooms[weekday][session]
+    return []
+
+def get_available_classrooms_from_occupied_classrooms_set(occupied_classrooms: set[str]) -> list[str]:
+    return list(CLASSROOMS - occupied_classrooms)
