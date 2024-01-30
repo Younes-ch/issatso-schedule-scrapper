@@ -136,6 +136,37 @@ def merge_occupied_classrooms(occupied_classrooms_from_timetable, occupied_class
         else:
             occupied_classrooms[weekday] = occupied_classrooms_from_timetable[weekday]
     return json.dumps(occupied_classrooms)
+
+def extract_timetable_info_from_timetable_html_to_json(group_instance: Group) -> str:
+    header = ["Jours", "Début", "Fin", "Matière", "Enseignant", "Type", "Salle", "Régime"]
+    timetable_info = {"header": header, "body": {}}
+    soup = BeautifulSoup(group_instance.timetable_html, 'html.parser')
+    table = soup.find('table')
+    tbody = table.find('tbody')
+    rows = tbody.find_all('tr')
+    for i, row in enumerate(rows):
+        timetable_info['body'][f"row_{i+1}"] = []
+        cells = row.find_all('td')
+        for cell in cells:
+            timetable_info['body'][f"row_{i+1}"].append(cell.text.strip())
+    return json.dumps(timetable_info, ensure_ascii=False)
+
+def extract_remedial_info_from_remedial_html_to_json(group_instance: Group) -> str:
+    header = ["Jour", "Date", "Séance", "Matière", "Enseignant", "Salle", "Type"]
+    remedial_info = {"header": header, "body": {}}
+    soup = BeautifulSoup(group_instance.remedial_html, 'html.parser')
+    table = soup.find('table')
+    tbody = table.find('tbody')
+    rows = tbody.find_all('tr')
+    if len(rows) == 0:
+        remedial_info['body'] = { "row_1": ["Aucune séance de rattrapage"]}
+        return json.dumps(remedial_info, ensure_ascii=False)
+    for i, row in enumerate(rows):
+        remedial_info['body'][f"row_{i+1}"] = []
+        cells = row.find_all('td')
+        for cell in cells:
+            remedial_info['body'][f"row_{i+1}"].append(cell.text.strip())
+    return json.dumps(remedial_info, ensure_ascii=False)
    
 def update_group(group_name) -> None:
     try:
@@ -144,6 +175,8 @@ def update_group(group_name) -> None:
         group = Group(name=group_name)
     group.timetable_html = get_group_timetable(group_name)
     group.remedial_html = get_group_remedial(group_name)
+    group.timetable_info_json = extract_timetable_info_from_timetable_html_to_json(group)
+    group.remedial_info_json = extract_remedial_info_from_remedial_html_to_json(group)
     occupied_classrooms_from_timetable = json.loads(extract_occupied_classrooms_from_timetable(group))
     occupied_classrooms_from_remedial = json.loads(extract_occupied_classrooms_from_remedial(group))
     group.occupied_classrooms = merge_occupied_classrooms(occupied_classrooms_from_timetable, occupied_classrooms_from_remedial)
