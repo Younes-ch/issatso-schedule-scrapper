@@ -195,3 +195,19 @@ def get_all_classrooms_occupied_by_a_group_in_a_day_and_session(
 
 def get_available_classrooms_from_occupied_classrooms_set(occupied_classrooms: set[str]) -> list[str]:
     return list(CLASSROOMS - occupied_classrooms)
+
+def get_classroom_availability_in_current_week(classroom: str) -> str:
+    groups = Group.objects.all()
+    availability = {weekday : {session: True for session in SESSIONS if session != "S4'"} for weekday in WEEKDAYS}
+    availability["Samedi"]["S4'"] = True
+    del availability["Samedi"]["S4"]
+    del availability["Samedi"]["S5"]
+    del availability["Samedi"]["S6"]
+    for weekday in WEEKDAYS:
+        for session in SESSIONS:
+            for group in groups:
+                if not (weekday == "Samedi" and session in ["S4", "S5", "S6"]):
+                    occupied_classrooms = get_all_classrooms_occupied_by_a_group_in_a_day_and_session(group, weekday, session)
+                    if classroom in occupied_classrooms:
+                        availability[weekday][session] = False
+    return availability
