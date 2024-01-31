@@ -1,10 +1,10 @@
 from typing import Literal
-from dotenv import load_dotenv
-from bs4 import BeautifulSoup
 import datetime
-import requests
 import json
 import os
+from dotenv import load_dotenv
+from bs4 import BeautifulSoup
+import requests
 
 from issatso.models import Group
 
@@ -41,7 +41,7 @@ def get_group_names():
     response = requests.get(ISSATSO_GROUP_NAMES_URL, headers=headers)
     if response.status_code == 200:
         for group in response.json():
-            yield group["designation"]
+            yield group['designation']
     else:
         return None
     
@@ -97,6 +97,9 @@ def extract_occupied_classrooms_from_remedial(group_instance: Group) -> str:
         return json.dumps({})
     for row in rows:
         cells = row.find_all('td')
+
+        if len(cells) == 0:
+            continue
 
         weekday = cells[0].text.strip()
         date = cells[1].text.strip()
