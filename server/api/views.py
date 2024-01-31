@@ -1,6 +1,4 @@
 from concurrent.futures import ThreadPoolExecutor
-import json
-from django.http import HttpResponse, JsonResponse
 from rest_framework.response import Response
 from django.core.paginator import Paginator
 from rest_framework.decorators import api_view
@@ -12,6 +10,7 @@ from .helpers import (
     CLASSROOMS,
     SESSIONS,
     WEEKDAYS,
+    TOKEN,
     get_group_names,
     update_group,
     get_available_classrooms_from_occupied_classrooms_set,
@@ -38,14 +37,14 @@ def group_names(request):
     if request.method == 'GET':
         group_names = get_group_names()
         if group_names:
-            return Response({"group_names": group_names}, status=200)
+            return Response({"count": len(group_names), "group_names": group_names}, status=200)
         else:
-            return HttpResponse(status=404)
+            return Response({"error": "Method not allowed"}, status=405)
 
 @api_view(['GET'])
 def group_list(request):
     if request.method == 'GET':
-        groups = Group.objects.all()
+        groups = Group.objects.all().order_by('name')
         paginator = Paginator(groups, 10)
 
         page_number = request.GET.get('page')
@@ -73,23 +72,32 @@ def group_detail(request, pk):
     try:
         group: Group = Group.objects.get(pk=pk.upper())
     except Group.DoesNotExist:
-        return HttpResponse(status=404)
+        return Response({"error": "Group not found"}, status=404)
     
     if request.method == 'GET':
         serializer = GroupSerializer(group)
         return Response(serializer.data, status=200)
+    else:
+        return Response({"error": "Method not allowed"}, status=405)
     
 @api_view(['GET'])
 def update_groups(request):
     if request.method == 'GET':
-        group_names = get_group_names()
-        if group_names:
-            with ThreadPoolExecutor(max_workers=10) as executor:
-                executor.map(update_group, group_names)
-        # update_group("ING-A1-01")
-        return Response({"status": "success"}, status=200)
+        authorization_header = request.headers.get('Authorization')
+        
+        if authorization_header and authorization_header == f'Bearer {TOKEN}':
+            group_names = get_group_names()
+            if group_names:
+                # for group_name in group_names:
+                #     update_group(group_name)
+                with ThreadPoolExecutor(max_workers=10) as executor:
+                    executor.map(update_group, group_names)
+            # update_group("ING-A1-01")
+            return Response({"status": "success"}, status=200)
+        else:
+            return Response({"error": "Unauthorized"}, status=401)
     else:
-        return HttpResponse(status=404)
+        return Response({"error": "Method not allowed"}, status=405)
     
 @api_view(['GET'])
 def classroom_list(request):
@@ -97,7 +105,7 @@ def classroom_list(request):
         classrooms = sorted(list(CLASSROOMS))
         return Response({"classrooms": classrooms}, status=200)
     else:
-        return HttpResponse(status=404)
+        return Response({"error": "Method not allowed"}, status=405)
     
 @api_view(['GET'])
 def available_classroom_list(request):
@@ -126,7 +134,7 @@ def available_classroom_list(request):
         else:
             return Response({"error": "Invalid weekday or session"}, status=400)
     else:
-        return HttpResponse(status=404)
+        return Response({"error": "Method not allowed"}, status=405)
     
 @api_view(['GET'])
 def classroom_availability_list(request, classroom: str):
