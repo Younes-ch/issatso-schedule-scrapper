@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  server:
+    build: ./server
+    command: ./entrypoint.sh
+    volumes:
+      - ./server:/code
+    env_file:
+      - ./server/.env
+    ports:
+      - "8000:8000"
+    networks:
+      - app-network
+    depends_on:
+      - db
+  db:
+    image: postgres:14
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=password
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge
+
+    
