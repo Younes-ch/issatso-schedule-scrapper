@@ -12,9 +12,10 @@ load_dotenv()
 
 # Stuff needed for ISSATSO API
 TOKEN = os.getenv('TOKEN')
-ISSATSO_GROUP_NAMES_URL = os.getenv('ISSATSO_API_URL') + 'groups/all/list'
-ISSATSO_TIMETABLE_URL = os.getenv('ISSATSO_API_URL') + 'student/timetable/'
-ISSATSO_REMEDIAL_URL = os.getenv('ISSATSO_API_URL') + 'student/rattrapage/'
+ISSATSO_API_URL = os.getenv('ISSATSO_API_URL')
+ISSATSO_GROUP_NAMES_URL = ISSATSO_API_URL + 'groups/all/list'
+ISSATSO_TIMETABLE_URL = ISSATSO_API_URL + 'student/timetable/'
+ISSATSO_REMEDIAL_URL = ISSATSO_API_URL + 'student/rattrapage/'
 headers = {
     'Authorization': f'Bearer {TOKEN}',
 }
