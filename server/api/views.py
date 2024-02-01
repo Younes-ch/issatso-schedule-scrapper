@@ -35,7 +35,7 @@ def api_root(request):
 @api_view(['GET'])
 def group_names(request):
     if request.method == 'GET':
-        group_names = get_group_names()
+        group_names = list(get_group_names())
         if group_names:
             return Response({"count": len(group_names), "group_names": group_names}, status=200)
         else:
