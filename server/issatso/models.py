@@ -5,8 +5,8 @@ class Group(models.Model):
     name = models.CharField(max_length=20, primary_key=True)
     timetable_html = models.TextField()
     remedial_html = models.TextField(null=True)
-    timetable_info_json = models.TextField()
-    remedial_info_json = models.TextField(null=True)
+    timetable_info_json = models.JSONField()
+    remedial_info_json = models.JSONField(null=True)
     occupied_classrooms = models.TextField()
 
     def __str__(self):
