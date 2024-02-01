@@ -4,6 +4,6 @@ from issatso.models import Group
 class GroupSerializer(ModelSerializer):
     class Meta:
         model = Group
-        fields = ['name', 'timetable_html', 'remedial_html', 'timetable_info_json', 'remedial_info_json']
+        fields = ['name', 'timetable_info_json', 'remedial_info_json']
         read_only_fields = ['name']
 
