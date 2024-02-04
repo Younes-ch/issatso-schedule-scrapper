@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 
-const Cursor = () => {
+interface CursorProps {
+  color: "primary" | "red-600";
+}
+
+const Cursor = ({ color }: CursorProps) => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [hidden, setHidden] = useState(false);
 
@@ -36,7 +40,7 @@ const Cursor = () => {
     <>
       {!hidden && (
         <div
-          className="z-50 fixed top-0 left-0 pointer-events-none w-14 h-14 rounded-full bg-primary filter blur-lg"
+          className={`z-50 fixed top-0 left-0 pointer-events-none w-14 h-14 rounded-full bg-${color} filter blur-lg`}
           style={{
             transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
           }}
