@@ -1,11 +1,7 @@
-import WelcomeHeader from "@/components/WelcomeHeader"
+import WelcomeHeader from "@/components/WelcomeHeader";
 
 const Home = () => {
-  return (
-    <div className="h-[80vh] flex flex-col items-center justify-center">
-      <WelcomeHeader />    
-    </div>
-  )
-}
+  return <WelcomeHeader />;
+};
 
-export default Home
+export default Home;
