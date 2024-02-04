@@ -3,8 +3,9 @@ interface BackgroundEffectProps {
 }
 
 const BackgroundEffect = ({ color }: BackgroundEffectProps) => {
+  const key = Date.now();
   return (
-    <ul className="fixed w-[100vw] h-[100vh] overflow-hidden top-0 left-0 m-0 p-0 -z-10 filter blur-3xl">
+    <ul key={key} className="fixed w-[100vw] h-[100vh] overflow-hidden top-0 left-0 m-0 p-0 -z-10 filter blur-3xl">
       <li
         className={`absolute block list-none bg-${color} mix-blend-multiply animate-float left-[37%] w-[130px] h-[130px] bottom-[-130px] delay-1000`}
       ></li>
