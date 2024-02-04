@@ -30,7 +30,10 @@ const NavBar = () => {
                 <ListItem href="/classrooms" title="Available classrooms">
                   Get available classrooms for a specific day and session.
                 </ListItem>
-                <ListItem href="/classrooms" title="Classroom availability">
+                <ListItem
+                  href="/classrooms/available"
+                  title="Classroom availability"
+                >
                   Get the availability of a specific classroom in the week.
                 </ListItem>
               </ul>
@@ -51,7 +54,8 @@ const ListItem = React.forwardRef<
   return (
     <li>
       <NavigationMenuLink asChild>
-        <Link to={props.href as string} 
+        <Link
+          to={props.href as string}
           ref={ref}
           className={cn(
             "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
