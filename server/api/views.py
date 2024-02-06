@@ -1,4 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor
+import re
 from rest_framework.response import Response
 from django.core.paginator import Paginator
 from rest_framework.decorators import api_view
@@ -103,6 +104,7 @@ def update_groups(request):
 def classroom_list(request):
     if request.method == 'GET':
         classrooms = sorted(list(CLASSROOMS))
+        classrooms = [{"label": classroom, "value": re.sub(r'\W+', '-', classroom).lower()} for classroom in classrooms]
         return Response({"classrooms": classrooms}, status=200)
     else:
         return Response({"error": "Method not allowed"}, status=405)
@@ -139,7 +141,13 @@ def available_classroom_list(request):
 @api_view(['GET'])
 def classroom_availability_list(request, classroom: str):
     if request.method == 'GET':
-        classroom = classroom.upper()
+        if classroom.startswith("amphi"):
+            if classroom == "amphi-golli-salem":
+                classroom = "Amphi: GOLLI Salem" 
+            elif classroom == "amphi-laatiri-mokhtar":
+                classroom = "Amphi: LAATIRI Mokhtar"
+        else:
+            classroom = classroom.upper()
         if classroom in CLASSROOMS:
             classroom_availability = get_classroom_availability_in_current_week(classroom)
             return Response(classroom_availability, status=200)
