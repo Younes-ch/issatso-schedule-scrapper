@@ -6,11 +6,54 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
+import useMediaQuery from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { Menu } from "lucide-react";
+import { Drawer, DrawerContent, DrawerTrigger } from "./ui/drawer";
+import { Separator } from "./ui/separator";
 
 const NavBar = () => {
+  const [open, setOpen] = useState(false);
+  const isRenderable = useMediaQuery("(min-width: 425px)");
+
+  if (!isRenderable) {
+    return (
+      <div className="w-full flex justify-end">
+        <Drawer open={open} onOpenChange={setOpen}>
+          <DrawerTrigger asChild>
+            <Menu
+              className="w-8 h-8 cursor-pointer"
+              aria-expanded={open}
+              role="button"
+            />
+          </DrawerTrigger>
+          <DrawerContent className="text-center mx-1 text-sm font-medium leading-none">
+            <div className="mt-4">
+              <Separator className="my-4" />
+              <Link to="/schedules" onClick={() => setOpen(false)}>
+                Schedules
+              </Link>
+              <Separator className="my-4" />
+              <Link to="/classrooms" onClick={() => setOpen(false)}>
+                Available Classrooms
+              </Link>
+              <Separator className="my-4" />
+              <Link
+                to="/classrooms/availability"
+                onClick={() => setOpen(false)}
+              >
+                Classroom availability
+              </Link>
+              <Separator className="my-4" />
+            </div>
+          </DrawerContent>
+        </Drawer>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full flex gap-2 justify-center">
       <NavigationMenu className="hide-on-hover">
@@ -26,12 +69,12 @@ const NavBar = () => {
           <NavigationMenuItem>
             <NavigationMenuTrigger>Classrooms</NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="grid w-[300px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+              <ul className="grid w-[300px] gap-3 p-4 md:w-[470px] md:grid-cols-2 lg:w-[600px]">
                 <ListItem href="/classrooms" title="Available classrooms">
                   Get available classrooms for a specific day and session.
                 </ListItem>
                 <ListItem
-                  href="/classrooms/available"
+                  href="/classrooms/availability"
                   title="Classroom availability"
                 >
                   Get the availability of a specific classroom in the week.
