@@ -1,3 +1,4 @@
 export default interface Classroom {
-    name: string;
+    label: string;
+    value: string;
 }
