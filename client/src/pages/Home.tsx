@@ -1,10 +1,15 @@
+import BackgroundEffect from "@/components/BackgroundEffect";
+import Cursor from "@/components/Cursor";
 import WelcomeHeader from "@/components/WelcomeHeader";
-import colorStore from "@/stores/colorStore";
 
 const Home = () => {
-  const changeColor = colorStore((state) => state.changeColor);
-  changeColor("primary");
-  return <WelcomeHeader />;
+  return (
+    <>
+      <WelcomeHeader />
+      <BackgroundEffect color="bg-primary" />
+      <Cursor color="bg-primary" />
+    </>
+  );
 };
 
 export default Home;

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 interface CursorProps {
-  color: "primary" | "red-600";
+  color: "bg-primary" | "bg-red-600";
 }
 
 const Cursor = ({ color }: CursorProps) => {
@@ -40,7 +40,7 @@ const Cursor = ({ color }: CursorProps) => {
     <>
       {!hidden && (
         <div
-          className={`z-50 fixed top-0 left-0 pointer-events-none w-14 h-14 rounded-full bg-${color} filter blur-lg`}
+          className={`z-50 fixed top-0 left-0 pointer-events-none w-14 h-14 rounded-full ${color} filter blur-lg`}
           style={{
             transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
           }}

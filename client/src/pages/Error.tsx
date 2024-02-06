@@ -1,12 +1,10 @@
+import BackgroundEffect from "@/components/BackgroundEffect";
+import Cursor from "@/components/Cursor";
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
-import colorStore from "@/stores/colorStore";
 import { Link } from "react-router-dom";
 
 const Error = () => {
-  const changeColor = colorStore((state) => state.changeColor);
-  changeColor("red-600");
-
   return (
     <>
       <Header>
@@ -20,6 +18,8 @@ const Error = () => {
           <Link to="/">Go Home</Link>
         </Button>
       </Header>
+      <BackgroundEffect color="bg-red-600" />
+      <Cursor color="bg-red-600" />
     </>
   );
 };
