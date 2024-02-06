@@ -1,3 +1,4 @@
+import useMediaQuery from "@/hooks/useMediaQuery";
 import { useEffect, useState } from "react";
 
 interface CursorProps {
@@ -5,6 +6,7 @@ interface CursorProps {
 }
 
 const Cursor = ({ color }: CursorProps) => {
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [hidden, setHidden] = useState(false);
 
@@ -38,7 +40,7 @@ const Cursor = ({ color }: CursorProps) => {
 
   return (
     <>
-      {!hidden && (
+      {(!hidden && isDesktop) && (
         <div
           className={`z-50 fixed top-0 left-0 pointer-events-none w-14 h-14 rounded-full ${color} filter blur-lg`}
           style={{
