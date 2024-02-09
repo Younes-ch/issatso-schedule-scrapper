@@ -11,17 +11,36 @@ import useClassroomAvailability from "@/hooks/useClassroomAvailability";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import classroomQueryStore from "@/stores/classroomQueryStore";
 import React from "react";
+import { Loader2 } from "lucide-react";
 
 const ClassroomAvailabilityTable = () => {
   const selectedClassroom = classroomQueryStore(
     (state) => state.selectedClassroom
   );
-  const { data: classroomAvailability } =
-    useClassroomAvailability(selectedClassroom);
+  const {
+    data: classroomAvailability,
+    isLoading,
+    error,
+  } = useClassroomAvailability(selectedClassroom);
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
   if (!selectedClassroom) {
     return null;
+  }
+
+  if (isLoading) {
+    return <Loader2 className="w-10 h-10 animate-spin text-primary" />;
+  }
+
+  if (error) {
+    return (
+      <div className="text-center font-medium">
+        <p className="text-red-600">⛔ {error.message}</p>
+        <p className="text-red-400">
+          Please try again later or contact the owner if the problem persists.
+        </p>
+      </div>
+    );
   }
 
   const days = [
