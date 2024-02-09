@@ -3,11 +3,10 @@ import { Outlet } from "react-router-dom";
 
 const Layout = () => {
   return (
-    <div className="flex flex-col items-center min-h-screen p-3 cursor-none">
+    <div className="flex flex-col items-center justify-between min-h-screen">
       <NavBar />
-      <div className="h-[80vh] w-full flex flex-col items-center justify-center">
-        <Outlet />
-      </div>
+      <Outlet />
+      <div className="pb-3 text-center">Footer</div>
     </div>
   );
 };

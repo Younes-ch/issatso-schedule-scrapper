@@ -20,7 +20,7 @@ const NavBar = () => {
 
   if (!isRenderable) {
     return (
-      <div className="w-full flex justify-end">
+      <div className="w-full flex justify-end sticky top-0 p-3">
         <Drawer open={open} onOpenChange={setOpen}>
           <DrawerTrigger asChild>
             <Menu
@@ -55,7 +55,7 @@ const NavBar = () => {
   }
 
   return (
-    <div className="w-full flex gap-2 justify-center">
+    <div className="w-full flex gap-2 justify-center p-3">
       <NavigationMenu className="hide-on-hover">
         <NavigationMenuList>
           <NavigationMenuItem>
