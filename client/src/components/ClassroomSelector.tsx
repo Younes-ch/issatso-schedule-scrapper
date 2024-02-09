@@ -20,7 +20,7 @@ const ClassroomSelector = () => {
         <PopoverTrigger asChild>
           <Button
             variant="outline"
-            className="w-[200px] justify-between"
+            className="w-fit justify-between"
             aria-expanded={open}
             role="combobox"
           >
@@ -42,7 +42,7 @@ const ClassroomSelector = () => {
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button variant="outline" className="w-[200px] justify-between">
+        <Button variant="outline" className="w-fit justify-between">
           {selectedClassroom ? (
             <>{selectedClassroom.label}</>
           ) : (
