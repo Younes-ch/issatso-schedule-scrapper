@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 
 const Layout = () => {
   return (
-    <div className="flex flex-col items-center justify-between min-h-screen gap-3">
+    <div className="flex flex-col items-center justify-between min-h-screen gap-3 cursor-none">
       <NavBar />
       <Outlet />
       <Footer />
