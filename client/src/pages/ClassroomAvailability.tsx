@@ -1,12 +1,15 @@
-import BackgroundEffect from "@/components/BackgroundEffect";
 import ClassroomAvailabilityTable from "@/components/ClassroomAvailabilityTable";
 import ClassroomSelector from "@/components/ClassroomSelector";
-import Cursor from "@/components/Cursor";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import classroomQueryStore from "@/stores/classroomQueryStore";
+import colorStore from "@/stores/colorStore";
 import { useEffect } from "react";
 
 const ClassroomAvailability = () => {
+  const setColor = colorStore((state) => state.setColor);
+  useEffect(() => {
+    setColor("blue");
+  }, []);
   const setSelectedClassroom = classroomQueryStore(
     (state) => state.setSelectedClassroom
   );
@@ -24,8 +27,6 @@ const ClassroomAvailability = () => {
           <ClassroomAvailabilityTable />
         </CardContent>
       </Card>
-      <BackgroundEffect color="bg-primary" />
-      <Cursor color="bg-primary" />
     </>
   );
 };

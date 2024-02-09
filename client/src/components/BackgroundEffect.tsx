@@ -1,8 +1,7 @@
-interface BackgroundEffectProps {
-  color: "bg-primary" | "bg-red-600";
-}
+import colorStore from "@/stores/colorStore";
 
-const BackgroundEffect = ({ color }: BackgroundEffectProps) => {
+const BackgroundEffect = () => {
+  const color = colorStore((state) => state.color) === "blue" ? "bg-primary" : "bg-red-600";
   const key = Date.now();
   return (
     <ul key={key} className="fixed w-[100vw] h-[100vh] overflow-hidden top-0 left-0 m-0 p-0 -z-10 filter blur-3xl">

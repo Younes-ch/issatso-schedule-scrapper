@@ -1,13 +1,15 @@
-import BackgroundEffect from "@/components/BackgroundEffect";
-import Cursor from "@/components/Cursor";
 import WelcomeHeader from "@/components/WelcomeHeader";
+import colorStore from "@/stores/colorStore";
+import { useEffect } from "react";
 
 const Home = () => {
+  const setColor = colorStore((state) => state.setColor);
+  useEffect(() => {
+    setColor("blue");
+  }, [])
   return (
     <>
       <WelcomeHeader />
-      <BackgroundEffect color="bg-primary" />
-      <Cursor color="bg-primary" />
     </>
   );
 };
