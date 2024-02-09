@@ -10,10 +10,12 @@ import {
 import useClassroomAvailability from "@/hooks/useClassroomAvailability";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import classroomQueryStore from "@/stores/classroomQueryStore";
-import React from "react";
+import React, { useEffect } from "react";
 import { Loader2 } from "lucide-react";
+import colorStore from "@/stores/colorStore";
 
 const ClassroomAvailabilityTable = () => {
+  const setColor = colorStore((state) => state.setColor);
   const selectedClassroom = classroomQueryStore(
     (state) => state.selectedClassroom
   );
@@ -22,6 +24,13 @@ const ClassroomAvailabilityTable = () => {
     isLoading,
     error,
   } = useClassroomAvailability(selectedClassroom);
+  useEffect(() => {
+    if (error) {
+      setColor("red");
+    } else {
+      setColor("blue");
+    }
+  }, [error])
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
   if (!selectedClassroom) {
