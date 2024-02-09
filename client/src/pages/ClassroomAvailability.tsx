@@ -15,7 +15,7 @@ const ClassroomAvailability = () => {
   }, [setSelectedClassroom]);
   return (
     <>
-      <Card className="w-fit text-center hide-on-hover cursor-default">
+      <Card>
         <CardHeader>
           <CardTitle>Choose a classroom</CardTitle>
         </CardHeader>
