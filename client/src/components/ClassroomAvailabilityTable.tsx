@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/table";
 import useClassroomAvailability from "@/hooks/useClassroomAvailability";
 import classroomQueryStore from "@/stores/classroomQueryStore";
-import { useEffect } from "react";
 
 const ClassroomAvailabilityTable = () => {
   const selectedClassroom = classroomQueryStore(
@@ -17,8 +16,6 @@ const ClassroomAvailabilityTable = () => {
   );
   const { data: classroomAvailability } =
     useClassroomAvailability(selectedClassroom);
-
-  useEffect(() => {}, [selectedClassroom]);
 
   if (!selectedClassroom) {
     return null;
