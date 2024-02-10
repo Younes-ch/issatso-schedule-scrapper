@@ -70,7 +70,7 @@ const NavBar = () => {
             <NavigationMenuTrigger>Classrooms</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid w-[300px] gap-3 p-4 md:w-[470px] md:grid-cols-2 lg:w-[600px]">
-                <ListItem href="/classrooms" title="Available classrooms">
+                <ListItem href="/classrooms/available" title="Available classrooms">
                   Get available classrooms for a specific day and session.
                 </ListItem>
                 <ListItem
