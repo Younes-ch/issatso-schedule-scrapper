@@ -19,6 +19,7 @@ const Error = () => {
     });
 
     return () => {
+      setCursorHidden(false);
       hideOnHoverElements.forEach((element) => {
         element.removeEventListener("mouseenter", () => setCursorHidden(true));
         element.removeEventListener("mouseleave", () => setCursorHidden(false));

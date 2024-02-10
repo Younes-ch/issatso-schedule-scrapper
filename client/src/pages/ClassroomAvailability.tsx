@@ -22,6 +22,7 @@ const ClassroomAvailability = () => {
     });
 
     return () => {
+      setCursorHidden(false);
       setSelectedClassroom(null);
       hideOnHoverElements.forEach((element) => {
         element.removeEventListener("mouseenter", () => setCursorHidden(true));

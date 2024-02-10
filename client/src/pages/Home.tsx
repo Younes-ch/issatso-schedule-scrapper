@@ -4,9 +4,11 @@ import { useEffect } from "react";
 
 const Home = () => {
   const setColor = colorStore((state) => state.setColor);
+
   useEffect(() => {
     setColor("blue");
-  }, [])
+  }, []);
+
   return (
     <>
       <WelcomeHeader />
