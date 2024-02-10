@@ -36,7 +36,7 @@ const NavBar = () => {
                 Schedules
               </Link>
               <Separator className="my-4" />
-              <Link to="/classrooms" onClick={() => setOpen(false)}>
+              <Link to="/classrooms/available" onClick={() => setOpen(false)}>
                 Available Classrooms
               </Link>
               <Separator className="my-4" />

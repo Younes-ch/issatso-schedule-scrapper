@@ -1,3 +1,4 @@
+import AvailableClassrooms from "@/pages/AvailableClassrooms";
 import ClassroomAvailability from "@/pages/ClassroomAvailability";
 import Error from "@/pages/Error";
 import Home from "@/pages/Home";
@@ -10,6 +11,7 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       { index: true, element: <Home /> },
+      { path: "classrooms/available", element: <AvailableClassrooms /> },
       { path: "classrooms/availability", element: <ClassroomAvailability /> },
       { path: "*", element: <Error /> },
     ],
