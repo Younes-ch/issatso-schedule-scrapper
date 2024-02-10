@@ -1,3 +1,4 @@
+import re
 from typing import Literal
 import datetime
 import json
@@ -215,3 +216,10 @@ def get_classroom_availability_in_current_week(classroom: str) -> str:
                     if classroom in occupied_classrooms:
                         availability[weekday][session] = False
     return availability
+
+def slugify_classroom(classroom: str) -> dict[str, str]:
+    classroom_object = {"label": classroom, "value": re.sub(r'\W+', '-', classroom).lower()}
+    return classroom_object
+
+def slugify_classrooms(classrooms: list[str]) -> list[dict[str, str]]:
+    return [slugify_classroom(classroom) for classroom in classrooms]

@@ -16,7 +16,9 @@ from .helpers import (
     update_group,
     get_available_classrooms_from_occupied_classrooms_set,
     get_all_classrooms_occupied_by_a_group_in_a_day_and_session,
-    get_classroom_availability_in_current_week
+    get_classroom_availability_in_current_week,
+    slugify_classroom,
+    slugify_classrooms
 )
 
 # Create your views here.
@@ -112,7 +114,7 @@ def bloc_list(request):
 def classroom_list(request):
     if request.method == 'GET':
         classrooms = sorted(list(CLASSROOMS))
-        classrooms = [{"label": classroom, "value": re.sub(r'\W+', '-', classroom).lower()} for classroom in classrooms]
+        classrooms = [slugify_classroom(classroom) for classroom in classrooms]
         return Response({"classrooms": classrooms}, status=200)
     else:
         return Response({"error": "Method not allowed"}, status=405)
@@ -139,6 +141,8 @@ def available_classroom_list(request):
                 available_classrooms_by_bloc[classroom[0]].append(classroom)
             
             available_classrooms_by_bloc = dict(sorted(available_classrooms_by_bloc.items()))
+            for bloc, classrooms in available_classrooms_by_bloc.items():
+                available_classrooms_by_bloc[bloc] = slugify_classrooms(classrooms)
 
             return Response({"available_classrooms": available_classrooms_by_bloc}, status=200)
         else:
