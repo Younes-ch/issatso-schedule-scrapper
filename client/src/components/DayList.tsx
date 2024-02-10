@@ -15,14 +15,14 @@ interface DayListProps {
 }
 
 const DayList = ({ setOpen }: DayListProps) => {
-  const { selectedWeekday, setWeekday } = availableClassroomsQueryStore(
-    (state) => {
+  const { selectedSession, selectedWeekday, setWeekday } =
+    availableClassroomsQueryStore((state) => {
       return {
+        selectedSession: state.availableClassroomsQuery.selectedSession,
         selectedWeekday: state.availableClassroomsQuery.selectedWeekday,
         setWeekday: state.setWeekday,
       };
-    }
-  );
+    });
   const englishDays = [
     "monday",
     "tuesday",
@@ -40,6 +40,19 @@ const DayList = ({ setOpen }: DayListProps) => {
     "samedi",
   ] as const;
 
+  const getDisabledDays = (
+    session: "s1" | "s2" | "s3" | "s4" | "s4'" | "s5" | "s6" | null
+  ) => {
+    if (session === null) return [];
+    if (session === "s4'") {
+      return ["monday", "tuesday", "wednesday", "thursday", "friday"];
+    } else if (session === "s4" || session === "s5" || session === "s6") {
+      return ["saturday"];
+    }
+    return [];
+  };
+  const disabledDays = getDisabledDays(selectedSession);
+
   return (
     <Command>
       <CommandInput placeholder="Filter days..." />
@@ -48,14 +61,23 @@ const DayList = ({ setOpen }: DayListProps) => {
         <CommandGroup>
           {englishDays?.map((day, idx) => (
             <CommandItem
-                key={idx}
-                value={day}
-                onSelect={(value) => {
-                    setWeekday(
-                        frenchDays.find((day) => day === frenchDays[englishDays.indexOf(value as typeof englishDays[number])]) || null
-                    );
-                    setOpen(false);
-                }}
+              key={idx}
+              value={day}
+              disabled={disabledDays.includes(day)}
+              onSelect={(value) => {
+                setWeekday(
+                  frenchDays.find(
+                    (day) =>
+                      day ===
+                      frenchDays[
+                        englishDays.indexOf(
+                          value as (typeof englishDays)[number]
+                        )
+                      ]
+                  ) || null
+                );
+                setOpen(false);
+              }}
             >
               <Check
                 className={cn(

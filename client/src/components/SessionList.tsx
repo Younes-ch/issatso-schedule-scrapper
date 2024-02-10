@@ -15,15 +15,33 @@ interface SessionListProps {
 }
 
 const SessionList = ({ setOpen }: SessionListProps) => {
-  const { selectedSession, setSession } = availableClassroomsQueryStore(
-    (state) => {
+  const { selectedWeekday, selectedSession, setSession } =
+    availableClassroomsQueryStore((state) => {
       return {
+        selectedWeekday: state.availableClassroomsQuery.selectedWeekday,
         selectedSession: state.availableClassroomsQuery.selectedSession,
         setSession: state.setSession,
       };
-    }
-  );
+    });
   const sessions = ["s1", "s2", "s3", "s4", "s4'", "s5", "s6"] as const;
+  const getDisabledSessions = (
+    weekday:
+      | "lundi"
+      | "mardi"
+      | "mercredi"
+      | "jeudi"
+      | "vendredi"
+      | "samedi"
+      | null
+  ) => {
+    if (weekday === null) return [];
+    if (weekday !== "samedi") {
+      return ["s4'"];
+    } else {
+      return ["s4", "s5", "s6"];
+    }
+  };
+  const disabledSessions = getDisabledSessions(selectedWeekday);
   return (
     <Command>
       <CommandInput placeholder="Filter sessions..." />
@@ -34,6 +52,7 @@ const SessionList = ({ setOpen }: SessionListProps) => {
             <CommandItem
               key={idx}
               value={session}
+              disabled={disabledSessions.includes(session)}
               onSelect={(value) => {
                 setSession(
                   sessions.find((session) => session === value) || null
