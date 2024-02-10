@@ -11,8 +11,8 @@ import useClassroomAvailability from "@/hooks/useClassroomAvailability";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import classroomQueryStore from "@/stores/classroomQueryStore";
 import React, { useEffect } from "react";
-import { Loader2 } from "lucide-react";
 import colorStore from "@/stores/colorStore";
+import Loader from "./Loader";
 
 const ClassroomAvailabilityTable = () => {
   const setColor = colorStore((state) => state.setColor);
@@ -38,7 +38,7 @@ const ClassroomAvailabilityTable = () => {
   }
 
   if (isLoading) {
-    return <Loader2 className="w-10 h-10 animate-spin text-primary" />;
+    return <Loader />;
   }
 
   if (error) {
