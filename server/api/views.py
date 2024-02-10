@@ -28,6 +28,7 @@ def api_root(request):
         request.build_absolute_uri() + 'groups/names',
         request.build_absolute_uri() + 'groups/<slug:pk>/',
         request.build_absolute_uri() + 'groups/update',
+        request.build_absolute_uri() + 'blocs/',
         request.build_absolute_uri() + 'classrooms/',
         request.build_absolute_uri() + 'classrooms/available/',
         request.build_absolute_uri() + 'classrooms/available/<slug:pk>/',
@@ -97,6 +98,13 @@ def update_groups(request):
             return Response({"status": "success"}, status=200)
         else:
             return Response({"error": "Unauthorized"}, status=401)
+    else:
+        return Response({"error": "Method not allowed"}, status=405)
+    
+@api_view(['GET'])
+def bloc_list(request):
+    if request.method == 'GET':
+        return Response({"blocs": sorted(BLOCS)}, status=200)
     else:
         return Response({"error": "Method not allowed"}, status=405)
     
