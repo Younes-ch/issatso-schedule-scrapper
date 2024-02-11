@@ -7,7 +7,6 @@ import availableClassroomsQueryStore from "@/stores/availableClassroomsQueryStor
 import classroomQueryStore from "@/stores/classroomQueryStore";
 import colorStore from "@/stores/colorStore";
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
 import ErrorMessage from "./ErrorMessage";
 import Loader from "./Loader";
 import {
@@ -108,14 +107,12 @@ const AvailableClassroomsTable = () => {
                     >
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Link
-                            to="/classrooms/availability"
+                          <span
+                            className="p-2 py-1 rounded-md hover:bg-primary/50 hover:cursor-pointer hover:underline"
                             onClick={() => setSelectedClassroom(classroom)}
                           >
-                            <span className="p-2 py-1 rounded-md hover:bg-primary/50 hover:cursor-pointer">
-                              {classroom.label}
-                            </span>
-                          </Link>
+                            {classroom.label}
+                          </span>
                         </TooltipTrigger>
                         <TooltipContent className="text-seconday">
                           <p>Check "{classroom.label}" availability</p>
