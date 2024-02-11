@@ -1,3 +1,7 @@
+import useClassroomNames from "@/hooks/useClassroomNames";
+import { cn } from "@/lib/utils";
+import classroomQueryStore from "@/stores/classroomQueryStore";
+import { Check } from "lucide-react";
 import {
   Command,
   CommandEmpty,
@@ -5,11 +9,7 @@ import {
   CommandInput,
   CommandItem,
 } from "./ui/command";
-import useClassroomNames from "@/hooks/useClassroomNames";
 import { ScrollArea } from "./ui/scroll-area";
-import { Check } from "lucide-react";
-import { cn } from "@/lib/utils";
-import classroomQueryStore from "@/stores/classroomQueryStore";
 
 interface ClassroomListProps {
   setOpen: (open: boolean) => void;

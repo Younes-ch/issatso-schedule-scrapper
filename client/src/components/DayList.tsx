@@ -1,3 +1,6 @@
+import { englishDays, frenchDays } from "@/data/days";
+import { cn } from "@/lib/utils";
+import availableClassroomsQueryStore from "@/stores/availableClassroomsQueryStore";
 import { Check } from "lucide-react";
 import {
   Command,
@@ -7,8 +10,6 @@ import {
   CommandItem,
 } from "./ui/command";
 import { ScrollArea } from "./ui/scroll-area";
-import availableClassroomsQueryStore from "@/stores/availableClassroomsQueryStore";
-import { cn } from "@/lib/utils";
 
 interface DayListProps {
   setOpen: (open: boolean) => void;

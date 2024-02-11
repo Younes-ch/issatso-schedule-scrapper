@@ -1,11 +1,12 @@
 import useMediaQuery from "@/hooks/useMediaQuery";
 import availableClassroomsQueryStore from "@/stores/availableClassroomsQueryStore";
-import { useState } from "react";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { ChevronsUpDown } from "lucide-react";
-import { Button } from "./ui/button";
-import { Drawer, DrawerTrigger, DrawerContent } from "./ui/drawer";
+import { useState } from "react";
 import SessionList from "./SessionList";
+import { Button } from "./ui/button";
+import { Drawer, DrawerContent, DrawerTrigger } from "./ui/drawer";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import sessionTimes from "@/data/sessionTimes";
 
 const SessionSelector = () => {
   const [open, setOpen] = useState(false);

@@ -1,4 +1,6 @@
+import { cn } from "@/lib/utils";
 import availableClassroomsQueryStore from "@/stores/availableClassroomsQueryStore";
+import { Check } from "lucide-react";
 import {
   Command,
   CommandEmpty,
@@ -7,8 +9,6 @@ import {
   CommandItem,
 } from "./ui/command";
 import { ScrollArea } from "./ui/scroll-area";
-import { cn } from "@/lib/utils";
-import { Check } from "lucide-react";
 
 interface SessionListProps {
   setOpen: (open: boolean) => void;
