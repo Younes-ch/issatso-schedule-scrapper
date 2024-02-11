@@ -20,7 +20,7 @@ const NavBar = () => {
 
   if (!isRenderable) {
     return (
-      <div className="w-full flex justify-end sticky top-0 p-3">
+      <div className="w-full flex justify-end sticky top-3 p-3 z-50">
         <Drawer open={open} onOpenChange={setOpen}>
           <DrawerTrigger asChild>
             <Menu
@@ -70,7 +70,10 @@ const NavBar = () => {
             <NavigationMenuTrigger>Classrooms</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid w-[300px] gap-3 p-4 md:w-[470px] md:grid-cols-2 lg:w-[600px]">
-                <ListItem href="/classrooms/available" title="Available classrooms">
+                <ListItem
+                  href="/classrooms/available"
+                  title="Available classrooms"
+                >
                   Get available classrooms for a specific day and session.
                 </ListItem>
                 <ListItem
