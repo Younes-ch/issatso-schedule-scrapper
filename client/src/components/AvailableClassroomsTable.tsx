@@ -6,7 +6,7 @@ import capitalize from "@/services/capitalize-word";
 import availableClassroomsQueryStore from "@/stores/availableClassroomsQueryStore";
 import classroomQueryStore from "@/stores/classroomQueryStore";
 import colorStore from "@/stores/colorStore";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import ErrorMessage from "./ErrorMessage";
 import Loader from "./Loader";
 import {
@@ -30,14 +30,15 @@ const AvailableClassroomsTable = () => {
   const availableClassroomsQuery = availableClassroomsQueryStore(
     (state) => state.availableClassroomsQuery
   );
-  const setSelectedClassroom = classroomQueryStore(
-    (state) => state.setSelectedClassroom
-  );
+  const { setSelectedClassroom } = classroomQueryStore();
   const {
     data: availableClassrooms,
     isLoading,
     error,
   } = useAvailableClassrooms(availableClassroomsQuery);
+
+  const blocs = ["A", "B", "F", "G", "H", "I", "J", "K", "L", "M"] as const;
+  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   useEffect(() => {
     if (error) {
@@ -46,9 +47,6 @@ const AvailableClassroomsTable = () => {
       setColor("blue");
     }
   }, [error]);
-
-  const blocs = ["A", "B", "F", "G", "H", "I", "J", "K", "L", "M"] as const;
-  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   if (isLoading) {
     return <Loader />;
@@ -84,8 +82,8 @@ const AvailableClassroomsTable = () => {
         </TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">Bloc</TableHead>
-            <TableHead className="w-[100px]">Available classrooms</TableHead>
+            <TableHead className="w-[50px]">Bloc</TableHead>
+            <TableHead>Available classrooms</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody className="text-left">
@@ -128,6 +126,73 @@ const AvailableClassroomsTable = () => {
       </Table>
     );
   }
+
+  return (
+    <Table>
+      <TableCaption>
+        Available classrooms in{" "}
+        {capitalize(
+          englishDays[
+            frenchDays.indexOf(availableClassroomsQuery.selectedWeekday)
+          ]
+        )}
+        ,{" "}
+        {availableClassroomsQuery.selectedSession.toUpperCase() +
+          " (" +
+          sessionTimes[availableClassroomsQuery.selectedSession] +
+          ")"}
+        .
+      </TableCaption>
+      <TableHeader>
+        <TableRow>
+          <TableHead className="w-[50px]">Bloc</TableHead>
+          <TableHead>Available classrooms</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody className="text-left">
+        {blocs.map((bloc) => {
+          if (availableClassrooms![bloc].length === 0) {
+            return null;
+          }
+          return (
+            <React.Fragment key={bloc}>
+              {availableClassrooms![bloc].map((classroom) => (
+                <TableRow
+                  key={classroom.value}
+                  className="hover:bg-transparent"
+                >
+                  {classroom === availableClassrooms![bloc][0] && (
+                    <TableCell
+                      rowSpan={availableClassrooms![bloc].length}
+                      className="font-medium text-muted-foreground"
+                      style={{ verticalAlign: "center" }}
+                    >
+                      {bloc}
+                    </TableCell>
+                  )}
+
+                  <TableCell
+                    className="underline hover:bg-primary/50"
+                    onClick={() => {
+                      setSelectedClassroom(classroom);
+                      setTimeout(() => {
+                        const element = document.querySelector(
+                          ".classroom-availability"
+                        );
+                        element?.scrollIntoView({ behavior: "smooth" });
+                      }, 100);
+                    }}
+                  >
+                    {classroom.label}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </React.Fragment>
+          );
+        })}
+      </TableBody>
+    </Table>
+  );
 };
 
 export default AvailableClassroomsTable;

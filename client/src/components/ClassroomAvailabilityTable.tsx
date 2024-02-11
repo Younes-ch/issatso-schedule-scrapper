@@ -100,7 +100,7 @@ const ClassroomAvailabilityTable = () => {
   }
 
   return (
-    <Table>
+    <Table className="classroom-availability">
       <TableCaption>{tableCaption}</TableCaption>
       <TableHeader>
         <TableRow>
