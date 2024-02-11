@@ -1,8 +1,19 @@
 import Classroom from "@/entities/classroom";
+import { AxiosRequestConfig } from "axios";
 import axiosInstance from "./api-client";
 
 interface FetchClassroomNamesResponse {
     classrooms: Classroom[];
+}
+
+type BLOCS = "A" | "B" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M";
+
+type AvailableClassrooms = {
+    [K in BLOCS]: Classroom[];
+}
+
+interface FetchAvailableClassroomsResponse {
+    available_classrooms: AvailableClassrooms;
 }
 
 interface SessionAvailability {
@@ -24,12 +35,15 @@ interface FetchClassroomAvailabilityResponse {
     "Samedi": SessionAvailability;
 }
 
-
 class ClassroomClient {
     constructor() { }
 
     getClassroomNames = () => {
         return axiosInstance.get<FetchClassroomNamesResponse>("/classrooms/").then((response) => response.data.classrooms);
+    }
+
+    getAvailableClassrooms = (config: AxiosRequestConfig) => {
+        return axiosInstance.get<FetchAvailableClassroomsResponse>("/classrooms/available/", config).then((response) => response.data.available_classrooms);
     }
 
     getClassroomAvailability = (classroom: string | undefined) => {
