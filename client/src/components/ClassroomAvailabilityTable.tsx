@@ -20,6 +20,7 @@ const ClassroomAvailabilityTable = () => {
   const selectedClassroom = classroomQueryStore(
     (state) => state.selectedClassroom
   );
+  const tableCaption = `"${selectedClassroom?.label}" availability in the current week.`;
   const {
     data: classroomAvailability,
     isLoading,
@@ -62,9 +63,7 @@ const ClassroomAvailabilityTable = () => {
   if (isDesktop) {
     return (
       <Table>
-        <TableCaption>
-          A list of classroom availability in the current week.
-        </TableCaption>
+        <TableCaption>{tableCaption}</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px]">Day</TableHead>
@@ -102,9 +101,7 @@ const ClassroomAvailabilityTable = () => {
 
   return (
     <Table>
-      <TableCaption>
-        A list of classroom availability in the current week.
-      </TableCaption>
+      <TableCaption>{tableCaption}</TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead>Day</TableHead>
