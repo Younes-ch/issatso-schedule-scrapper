@@ -24,22 +24,6 @@ const DayList = ({ setOpen }: DayListProps) => {
         setWeekday: state.setWeekday,
       };
     });
-  const englishDays = [
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-  ] as const;
-  const frenchDays = [
-    "lundi",
-    "mardi",
-    "mercredi",
-    "jeudi",
-    "vendredi",
-    "samedi",
-  ] as const;
 
   const getDisabledDays = (
     session: "s1" | "s2" | "s3" | "s4" | "s4'" | "s5" | "s6" | null
