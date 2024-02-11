@@ -1,3 +1,4 @@
+import AvailableClassroomsTable from "@/components/AvailableClassroomsTable";
 import DaySelector from "@/components/DaySelector";
 import SessionSelector from "@/components/SessionSelector";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,12 +10,9 @@ import { useEffect } from "react";
 const AvailableClassrooms = () => {
   const setColor = colorStore((state) => state.setColor);
   const setCursorHidden = cursorHideStore((state) => state.setCursorHidden);
-  const { setWeekday, setSession } = availableClassroomsQueryStore((state) => {
-    return {
-      setWeekday: state.setWeekday,
-      setSession: state.setSession,
-    };
-  });
+  const { setWeekday, setSession } =
+    availableClassroomsQueryStore();
+
 
   useEffect(() => {
     setColor("blue");
@@ -27,6 +25,7 @@ const AvailableClassrooms = () => {
     return () => {
       setWeekday(null);
       setSession(null);
+      setCursorHidden(false);
       hideOnHoverElements.forEach((element) => {
         element.removeEventListener("mouseenter", () => setCursorHidden(true));
         element.removeEventListener("mouseleave", () => setCursorHidden(false));
@@ -48,6 +47,7 @@ const AvailableClassrooms = () => {
             <SessionSelector />
           </div>
         </div>
+        <AvailableClassroomsTable />
       </CardContent>
     </Card>
   );
