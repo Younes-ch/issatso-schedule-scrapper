@@ -10,8 +10,9 @@ import {
 import useClassroomAvailability from "@/hooks/useClassroomAvailability";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import classroomQueryStore from "@/stores/classroomQueryStore";
-import React, { useEffect } from "react";
 import colorStore from "@/stores/colorStore";
+import React, { useEffect } from "react";
+import ErrorMessage from "./ErrorMessage";
 import Loader from "./Loader";
 
 const ClassroomAvailabilityTable = () => {
@@ -24,13 +25,15 @@ const ClassroomAvailabilityTable = () => {
     isLoading,
     error,
   } = useClassroomAvailability(selectedClassroom);
+
   useEffect(() => {
     if (error) {
       setColor("red");
     } else {
       setColor("blue");
     }
-  }, [error])
+  }, [error]);
+
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
   if (!selectedClassroom) {
@@ -42,14 +45,7 @@ const ClassroomAvailabilityTable = () => {
   }
 
   if (error) {
-    return (
-      <div className="text-center font-medium">
-        <p className="text-red-600">⛔ {error.message}</p>
-        <p className="text-red-400">
-          Please try again later or contact the owner if the problem persists.
-        </p>
-      </div>
-    );
+    return <ErrorMessage message={error.message} />;
   }
 
   const days = [
@@ -80,7 +76,9 @@ const ClassroomAvailabilityTable = () => {
         <TableBody className="text-left">
           {days.map(({ frenchDay, englishDay }) => (
             <TableRow key={frenchDay}>
-              <TableCell className="font-medium">{englishDay}</TableCell>
+              <TableCell className="font-medium text-muted-foreground">
+                {englishDay}
+              </TableCell>
               {sessions.map((session) => (
                 <TableCell key={session}>
                   {classroomAvailability?.[frenchDay]?.[session] !==
