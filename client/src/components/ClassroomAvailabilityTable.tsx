@@ -113,7 +113,7 @@ const ClassroomAvailabilityTable = () => {
         {days.map(({ frenchDay, englishDay }) => (
           <React.Fragment key={frenchDay}>
             {sessions.map((session) => (
-              <TableRow key={`${frenchDay}-${session}`}>
+              <TableRow key={`${frenchDay}-${session}`} className="hover:bg-transparent">
                 {session === "S1" && (
                   <TableCell
                     rowSpan={sessions.length}
