@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-interface AvailableClassroomsQuery {
+export interface AvailableClassroomsQuery {
     selectedWeekday: "lundi" | "mardi" | "mercredi" | "jeudi" | "vendredi" | "samedi" | null;
     selectedSession: "s1" | "s2" | "s3" | "s4" | "s4'" | "s5" | "s6" | null;
 }
