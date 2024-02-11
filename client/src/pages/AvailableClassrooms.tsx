@@ -1,8 +1,10 @@
 import AvailableClassroomsTable from "@/components/AvailableClassroomsTable";
+import ClassroomAvailabilityTable from "@/components/ClassroomAvailabilityTable";
 import DaySelector from "@/components/DaySelector";
 import SessionSelector from "@/components/SessionSelector";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import availableClassroomsQueryStore from "@/stores/availableClassroomsQueryStore";
+import classroomQueryStore from "@/stores/classroomQueryStore";
 import colorStore from "@/stores/colorStore";
 import cursorHideStore from "@/stores/cursorHideStore";
 import { useEffect } from "react";
@@ -10,9 +12,8 @@ import { useEffect } from "react";
 const AvailableClassrooms = () => {
   const setColor = colorStore((state) => state.setColor);
   const setCursorHidden = cursorHideStore((state) => state.setCursorHidden);
-  const { setWeekday, setSession } =
-    availableClassroomsQueryStore();
-
+  const { setWeekday, setSession } = availableClassroomsQueryStore();
+  const setSelectedClassroom = classroomQueryStore(state => state.setSelectedClassroom);
 
   useEffect(() => {
     setColor("blue");
@@ -25,6 +26,7 @@ const AvailableClassrooms = () => {
     return () => {
       setWeekday(null);
       setSession(null);
+      setSelectedClassroom(null);
       setCursorHidden(false);
       hideOnHoverElements.forEach((element) => {
         element.removeEventListener("mouseenter", () => setCursorHidden(true));
@@ -48,6 +50,7 @@ const AvailableClassrooms = () => {
           </div>
         </div>
         <AvailableClassroomsTable />
+        <ClassroomAvailabilityTable />
       </CardContent>
     </Card>
   );
