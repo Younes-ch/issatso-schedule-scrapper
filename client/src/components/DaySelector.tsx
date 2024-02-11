@@ -1,4 +1,6 @@
+import { englishDays, frenchDays } from "@/data/days";
 import useMediaQuery from "@/hooks/useMediaQuery";
+import capitalize from "@/services/capitalize-word";
 import availableClassroomsQueryStore from "@/stores/availableClassroomsQueryStore";
 import { ChevronsUpDown } from "lucide-react";
 import { useState } from "react";
@@ -13,22 +15,10 @@ const DaySelector = () => {
   const selectedWeekday = availableClassroomsQueryStore(
     (state) => state.availableClassroomsQuery.selectedWeekday
   );
-  const englishDays = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
-  const frenchDays = [
-    "lundi",
-    "mardi",
-    "mercredi",
-    "jeudi",
-    "vendredi",
-    "samedi",
-  ];
+  const buttonLabel = selectedWeekday
+    ? capitalize(englishDays[frenchDays.indexOf(selectedWeekday)])
+    : "Pick a day";
+
   if (isDesktop) {
     return (
       <Popover open={open} onOpenChange={setOpen}>
@@ -39,11 +29,7 @@ const DaySelector = () => {
             aria-expanded={open}
             role="combobox"
           >
-            {selectedWeekday ? (
-              <>{englishDays[frenchDays.indexOf(selectedWeekday)]}</>
-            ) : (
-              <>Pick a day</>
-            )}
+            {buttonLabel}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -58,11 +44,7 @@ const DaySelector = () => {
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
         <Button variant="outline" className="w-fit justify-between">
-          {selectedWeekday ? (
-            <>{englishDays[frenchDays.indexOf(selectedWeekday)]}</>
-          ) : (
-            <>Pick a day</>
-          )}
+          {buttonLabel}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </DrawerTrigger>

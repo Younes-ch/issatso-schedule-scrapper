@@ -13,6 +13,9 @@ const ClassroomSelector = () => {
   const selectedClassroom = classroomQueryStore(
     (state) => state.selectedClassroom
   );
+  const buttonLabel = selectedClassroom
+    ? selectedClassroom.label
+    : "Select a classroom";
 
   if (isDesktop) {
     return (
@@ -24,11 +27,7 @@ const ClassroomSelector = () => {
             aria-expanded={open}
             role="combobox"
           >
-            {selectedClassroom ? (
-              <>{selectedClassroom.label}</>
-            ) : (
-              <>Select a classroom</>
-            )}
+            {buttonLabel}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -43,11 +42,7 @@ const ClassroomSelector = () => {
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
         <Button variant="outline" className="w-fit justify-between">
-          {selectedClassroom ? (
-            <>{selectedClassroom.label}</>
-          ) : (
-            <>Select a classroom</>
-          )}
+          {buttonLabel}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </DrawerTrigger>

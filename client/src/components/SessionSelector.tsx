@@ -14,6 +14,7 @@ const SessionSelector = () => {
   const selectedSession = availableClassroomsQueryStore(
     (state) => state.availableClassroomsQuery.selectedSession
   );
+  const buttonLabel = selectedSession ? sessionTimes[selectedSession] : "Pick a session";
 
   if (isDesktop) {
     return (
@@ -25,11 +26,7 @@ const SessionSelector = () => {
             aria-expanded={open}
             role="combobox"
           >
-            {selectedSession ? (
-              <>{selectedSession.toUpperCase()}</>
-            ) : (
-              <>Pick a session</>
-            )}
+            {buttonLabel}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -44,7 +41,7 @@ const SessionSelector = () => {
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
         <Button variant="outline" className="w-fit justify-between">
-          {selectedSession ? <>{selectedSession.toUpperCase()}</> : <>Pick a session</>}
+          {buttonLabel}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </DrawerTrigger>
