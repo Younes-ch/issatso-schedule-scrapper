@@ -14,7 +14,7 @@ const SessionSelector = () => {
   const selectedSession = availableClassroomsQueryStore(
     (state) => state.availableClassroomsQuery.selectedSession
   );
-  const buttonLabel = selectedSession ? sessionTimes[selectedSession] : "Pick a session";
+  const buttonLabel = selectedSession ? `${selectedSession.toUpperCase()} - ${sessionTimes[selectedSession]}` : "Pick a session";
 
   if (isDesktop) {
     return (
