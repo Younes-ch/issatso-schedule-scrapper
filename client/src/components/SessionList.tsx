@@ -9,6 +9,7 @@ import {
   CommandItem,
 } from "./ui/command";
 import { ScrollArea } from "./ui/scroll-area";
+import sessionTimes from "@/data/sessionTimes";
 
 interface SessionListProps {
   setOpen: (open: boolean) => void;
@@ -66,7 +67,7 @@ const SessionList = ({ setOpen }: SessionListProps) => {
                   selectedSession === session ? "opacity-100" : "opacity-0"
                 )}
               />
-              {session.toUpperCase()}
+              {`${session.toUpperCase()} - ${sessionTimes[session]}`}
             </CommandItem>
           ))}
         </CommandGroup>
