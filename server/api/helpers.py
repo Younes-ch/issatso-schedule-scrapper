@@ -45,7 +45,8 @@ def get_group_names():
     response = requests.get(ISSATSO_GROUP_NAMES_URL, headers=headers)
     if response.status_code == 200:
         for group in response.json():
-            yield group['designation']
+            if group['designation'] != "GroupeTD":
+                yield group['designation']
     else:
         return None
     
@@ -145,11 +146,12 @@ def merge_occupied_classrooms(occupied_classrooms_from_timetable, occupied_class
     return json.dumps(occupied_classrooms)
 
 def extract_timetable_info_from_timetable_html_to_json(group_instance: Group) -> str:
-    timetable_info = {"header": TIMETABLE_HEADER}
+    timetable_info = {}
     soup = BeautifulSoup(group_instance.timetable_html, 'html.parser')
     table = soup.find('table')
     tbody = table.find('tbody')
     rows = tbody.find_all('tr')
+    timetable_info["num_rows"] = len(rows)
     for i, row in enumerate(rows):
         timetable_info[f"row_{i+1}"] = []
         cells = row.find_all('td')
@@ -158,11 +160,12 @@ def extract_timetable_info_from_timetable_html_to_json(group_instance: Group) ->
     return json.dumps(timetable_info, ensure_ascii=False)
 
 def extract_remedial_info_from_remedial_html_to_json(group_instance: Group) -> str:
-    remedial_info = {"header": REMEDIAL_HEADER}
+    remedial_info = {}
     soup = BeautifulSoup(group_instance.remedial_html, 'html.parser')
     table = soup.find('table')
     tbody = table.find('tbody')
     rows = tbody.find_all('tr')
+    remedial_info["num_rows"] = 1 if len(rows) == 0 else len(rows)
     if len(rows) == 0:
         remedial_info["row_1"] =  ["Aucune séance de rattrapage"]
         return json.dumps(remedial_info, ensure_ascii=False)

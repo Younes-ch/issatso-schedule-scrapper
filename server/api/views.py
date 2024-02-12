@@ -11,6 +11,8 @@ from .helpers import (
     CLASSROOMS,
     SESSIONS,
     WEEKDAYS,
+    TIMETABLE_HEADER,
+    REMEDIAL_HEADER,
     TOKEN,
     get_group_names,
     update_group,
@@ -79,8 +81,10 @@ def group_detail(request, pk):
         return Response({"error": "Group not found"}, status=404)
     
     if request.method == 'GET':
-        serializer = GroupSerializer(group)
-        return Response(serializer.data, status=200)
+        data = GroupSerializer(group).data
+        data["timetable_header"] = TIMETABLE_HEADER
+        data["remedial_header"] = REMEDIAL_HEADER
+        return Response(data, status=200)
     else:
         return Response({"error": "Method not allowed"}, status=405)
     
@@ -92,11 +96,8 @@ def update_groups(request):
         if authorization_header and authorization_header == f'Bearer {TOKEN}':
             group_names = get_group_names()
             if group_names:
-                # for group_name in group_names:
-                #     update_group(group_name)
-                with ThreadPoolExecutor(max_workers=10) as executor:
-                    executor.map(update_group, group_names)
-            # update_group("ING-A1-01")
+                for group_name in group_names:
+                    update_group(group_name)
             return Response({"status": "success"}, status=200)
         else:
             return Response({"error": "Unauthorized"}, status=401)
