@@ -2,19 +2,18 @@ import useGroupSchedules from "@/hooks/useGroupSchedules";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import colorStore from "@/stores/colorStore";
 import groupQueryStore from "@/stores/groupQueryStore";
-import { useEffect } from "react";
-import Loader from "./Loader";
+import React, { useEffect } from "react";
 import ErrorMessage from "./ErrorMessage";
+import Loader from "./Loader";
 import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
 } from "./ui/table";
-import React from "react";
 
 const TimeTableSchedule = React.forwardRef<HTMLDivElement>((_, ref) => {
   const setColor = colorStore((state) => state.setColor);

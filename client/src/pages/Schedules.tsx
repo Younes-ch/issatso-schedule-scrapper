@@ -3,9 +3,9 @@ import RemedialSchedule from "@/components/RemedialSchedule";
 import TimeTableSchedule from "@/components/TimeTableSchedule";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
 } from "@/components/ui/tooltip";
 import colorStore from "@/stores/colorStore";
 import cursorHideStore from "@/stores/cursorHideStore";

@@ -6,13 +6,13 @@ import React, { useEffect } from "react";
 import ErrorMessage from "./ErrorMessage";
 import Loader from "./Loader";
 import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
 } from "./ui/table";
 
 const RemedialSchedule = React.forwardRef<HTMLDivElement>((_, ref) => {
