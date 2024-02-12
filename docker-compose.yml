@@ -1,6 +1,15 @@
 version: '3'
 
 services:
+  client:
+    build: ./client
+    command: npm run dev
+    volumes:
+      - ./client:/code
+    ports:
+      - "5173:5173"
+    networks:
+      - app-network
   server:
     build: ./server
     command: ./entrypoint.sh
