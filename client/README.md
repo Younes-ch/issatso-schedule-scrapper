@@ -1,30 +1,11 @@
-# React + TypeScript + Vite
+# Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the frontend of the ISSATSo Schedule Scrapper project, it is an interactive and responsive web application that consumes the [API](../server) and provides information about the schedule of the students of the Higher Institute of Applied Sciences and Technology of Sousse (ISSATSo) and the availability of the classrooms. it is built using [ReactJS](https://reactjs.org/), [React Query](https://tanstack.com/query/latest) for data fetching, [Zustand](https://zustand-demo.pmnd.rs/) for state management and [TypeScript](https://www.typescriptlang.org/) for type safety with the help of [Tailwind CSS](https://tailwindcss.com/) and [Shadcn-Ui](https://ui.shadcn.com/) for the UI components.
 
-Currently, two official plugins are available:
+## Pages
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+- [Home](./src/pages/Home.tsx)
+- [Error](./src/pages/Error.tsx)
+- [Schedules](./src/pages/Schedules.tsx)
+- [Available Classrooms](./src/pages/AvailableClassrooms.tsx)
+- [Classroom Availability](./src/pages/ClassroomAvailability.tsx)
