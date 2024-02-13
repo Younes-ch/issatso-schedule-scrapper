@@ -10,14 +10,15 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
+    errorElement: <Error header="Error" message="Something went wrong" />,
     children: [
       { index: true, element: <Home /> },
       { path: "schedules", element: <Schedules /> },
       { path: "classrooms/available", element: <AvailableClassrooms /> },
       { path: "classrooms/availability", element: <ClassroomAvailability /> },
-      { path: "*", element: <Error /> },
     ],
   },
+  { path: "*", element: <Error header="404" message="Page not found" /> },
 ]);
 
 export default router;
