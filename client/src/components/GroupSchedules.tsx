@@ -1,70 +1,74 @@
-import { ArrowDown, ArrowUp } from "lucide-react";
-import RemedialSchedule from "./RemedialSchedule";
-import TimeTableSchedule from "./TimeTableSchedule";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "./ui/tooltip";
+import useGroupSchedules from "@/hooks/useGroupSchedules";
+import colorStore from "@/stores/colorStore";
 import groupQueryStore from "@/stores/groupQueryStore";
-import { useInViewport, useScrollIntoView } from "@mantine/hooks";
+import { useIntersection } from "@mantine/hooks";
+import { ArrowDown, ArrowUp } from "lucide-react";
+import { useEffect, useRef } from "react";
+import ErrorMessage from "./ErrorMessage";
+import Loader from "./Loader";
+import RemedialSchedule from "./RemedialSchedule";
+import ScrollButton from "./ScrollButton";
+import TimeTableSchedule from "./TimeTableSchedule";
 
 const GroupSchedules = () => {
   const selectedGroup = groupQueryStore((state) => state.selectedGroup);
-  const { ref: remedialInViewportRef, inViewport: remedialInViewport } =
-    useInViewport<HTMLDivElement>();
   const {
-    scrollIntoView: remedialScrollIntoView,
-    targetRef: remedialScrollIntoViewRef,
-  } = useScrollIntoView<HTMLDivElement>({
-    offset: 60,
+    data: groupInfo,
+    isLoading,
+    error,
+  } = useGroupSchedules(selectedGroup);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { ref, entry } = useIntersection({
+    root: containerRef.current,
+    threshold: 1,
   });
-  const {
-    scrollIntoView: timetableScrollIntoView,
-    targetRef: timetableScrollIntoViewRef,
-  } = useScrollIntoView<HTMLDivElement>({
-    offset: 60,
-  });
+  const setColor = colorStore((state) => state.setColor);
+
+  useEffect(() => {
+    if (error) {
+      setColor("red");
+    } else {
+      setColor("blue");
+    }
+  }, [error]);
+
+  if (!selectedGroup) {
+    return null;
+  }
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (error) {
+    return <ErrorMessage message={error.message} />;
+  }
   return (
     <>
-      <TimeTableSchedule ref={timetableScrollIntoViewRef} />
-      <div className="w-full flex justify-center" ref={remedialInViewportRef}>
-        <RemedialSchedule ref={remedialScrollIntoViewRef} />
+      <TimeTableSchedule groupInfo={groupInfo} />
+      <div ref={ref} className="w-full flex justify-center">
+        <RemedialSchedule groupInfo={groupInfo} />
       </div>
-      {selectedGroup && !remedialInViewport ? (
-        <TooltipProvider delayDuration={150} skipDelayDuration={100}>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div
-                className="fixed bottom-16 right-16 rounded-full w-10 h-10 bg-primary flex justify-center items-center translate-y-[-25%] hover:animate-bounce hover:cursor-pointer"
-                onClick={() => remedialScrollIntoView()}
-              >
-                <ArrowDown />
-              </div>
-            </TooltipTrigger>
-            <TooltipContent className="text-seconday-foreground">
-              Scroll down to Remedial schedule
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      ) : selectedGroup && remedialInViewport ? (
-        <TooltipProvider delayDuration={150} skipDelayDuration={100}>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div
-                className="fixed bottom-16 right-16 rounded-full w-10 h-10 bg-primary flex justify-center items-center translate-y-[-25%] hover:animate-bounce hover:cursor-pointer"
-                onClick={() => timetableScrollIntoView()}
-              >
-                <ArrowUp />
-              </div>
-            </TooltipTrigger>
-            <TooltipContent className="text-seconday-foreground">
-              Scroll up to Timetable schedule
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      ) : null}
+      {entry?.isIntersecting && (
+        <ScrollButton
+          icon={<ArrowUp />}
+          content="Scroll up to Timetable schedule"
+          onClick={() => {
+            const element = document.querySelector(".timetable-schedule");
+            element?.scrollIntoView({ behavior: "smooth" });
+          }}
+        />
+      )}
+      {!entry?.isIntersecting && (
+        <ScrollButton
+          icon={<ArrowDown />}
+          content="Scroll down to Remedial schedule"
+          onClick={() => {
+            const element = document.querySelector(".remedial-schedule");
+            element?.scrollIntoView({ behavior: "smooth" });
+          }}
+        />
+      )}
     </>
   );
 };
