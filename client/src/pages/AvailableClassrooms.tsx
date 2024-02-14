@@ -7,13 +7,17 @@ import availableClassroomsQueryStore from "@/stores/availableClassroomsQueryStor
 import classroomQueryStore from "@/stores/classroomQueryStore";
 import colorStore from "@/stores/colorStore";
 import cursorHideStore from "@/stores/cursorHideStore";
+import { useScrollIntoView } from "@mantine/hooks";
 import { useEffect } from "react";
 
 const AvailableClassrooms = () => {
   const setColor = colorStore((state) => state.setColor);
   const setCursorHidden = cursorHideStore((state) => state.setCursorHidden);
+  const { targetRef, scrollIntoView } = useScrollIntoView<HTMLDivElement>();
   const { setWeekday, setSession } = availableClassroomsQueryStore();
-  const setSelectedClassroom = classroomQueryStore(state => state.setSelectedClassroom);
+  const setSelectedClassroom = classroomQueryStore(
+    (state) => state.setSelectedClassroom
+  );
 
   useEffect(() => {
     setColor("blue");
@@ -49,8 +53,10 @@ const AvailableClassrooms = () => {
             <SessionSelector />
           </div>
         </div>
-        <AvailableClassroomsTable />
-        <ClassroomAvailabilityTable />
+        <AvailableClassroomsTable scrollIntoView={scrollIntoView} />
+        <div ref={targetRef} className="w-full flex justify-center">
+          <ClassroomAvailabilityTable />
+        </div>
       </CardContent>
     </Card>
   );

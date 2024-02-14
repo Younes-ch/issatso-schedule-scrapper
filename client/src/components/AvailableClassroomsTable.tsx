@@ -25,7 +25,13 @@ import {
   TooltipTrigger,
 } from "./ui/tooltip";
 
-const AvailableClassroomsTable = () => {
+interface AvailableClassroomsTableProps {
+  scrollIntoView: () => void;
+}
+
+const AvailableClassroomsTable = ({
+  scrollIntoView,
+}: AvailableClassroomsTableProps) => {
   const setColor = colorStore((state) => state.setColor);
   const availableClassroomsQuery = availableClassroomsQueryStore(
     (state) => state.availableClassroomsQuery
@@ -107,7 +113,10 @@ const AvailableClassroomsTable = () => {
                         <TooltipTrigger asChild>
                           <span
                             className="p-2 py-1 rounded-md hover:bg-primary/50 hover:cursor-pointer hover:underline"
-                            onClick={() => setSelectedClassroom(classroom)}
+                            onClick={() => {
+                              setSelectedClassroom(classroom);
+                              scrollIntoView();
+                            }}
                           >
                             {classroom.label}
                           </span>
@@ -175,12 +184,13 @@ const AvailableClassroomsTable = () => {
                     className="underline hover:bg-primary/50"
                     onClick={() => {
                       setSelectedClassroom(classroom);
-                      setTimeout(() => {
-                        const element = document.querySelector(
-                          ".classroom-availability"
-                        );
-                        element?.scrollIntoView({ behavior: "smooth" });
-                      }, 100);
+                      scrollIntoView();
+                      // setTimeout(() => {
+                      //   const element = document.querySelector(
+                      //     ".classroom-availability"
+                      //   );
+                      //   element?.scrollIntoView({ behavior: "smooth" });
+                      // }, 100);
                     }}
                   >
                     {classroom.label}
