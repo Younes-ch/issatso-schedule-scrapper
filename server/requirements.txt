@@ -14,3 +14,4 @@ soupsieve==2.5
 sqlparse==0.4.4
 typing_extensions==4.9.0
 urllib3==2.1.0
+whitenoise==6.6.0
