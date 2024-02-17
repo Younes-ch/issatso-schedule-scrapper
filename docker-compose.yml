@@ -15,8 +15,6 @@ services:
     command: ./entrypoint.sh
     volumes:
       - ./server:/code
-    env_file:
-      - ./server/.env
     ports:
       - "8000:8000"
     networks:
@@ -31,8 +29,13 @@ services:
       - POSTGRES_PASSWORD=password
     networks:
       - app-network
+    volumes:
+      - database:/var/lib/postgresql/data
 networks:
   app-network:
     driver: bridge
+  
+volumes:
+  database:
 
     

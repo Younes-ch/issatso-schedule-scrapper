@@ -1,5 +1,14 @@
 # API
 
+## ENV Variables
+
+- `SECRET_KEY`: The secret key for the Django project.
+
+```bash
+# To generate a new secret key run the following command in the terminal and copy the output.
+python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
+```
+
 ## Endpoints
 
 ### `GET /api/groups/`

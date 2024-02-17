@@ -28,7 +28,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = ast.literal_eval(os.getenv('DEBUG').capitalize())
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.vercel.app', '.pythonanywhere.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.vercel.app', '.azurewebsites.net']
 NAME = os.getenv('PG_DATABASE')
 USER = os.getenv('PG_USERNAME')
 PASSWORD = os.getenv('PG_PASSWORD')
