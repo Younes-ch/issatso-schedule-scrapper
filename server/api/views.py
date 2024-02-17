@@ -74,9 +74,9 @@ def group_list(request):
         }, status=200)
 
 @api_view(['GET'])
-def group_detail(request, pk):
+def group_detail(request, pk: str):
     try:
-        group: Group = Group.objects.get(pk=pk.upper())
+        group: Group = Group.objects.get(pk=pk)
     except Group.DoesNotExist:
         return Response({"error": "Group not found"}, status=404)
     
