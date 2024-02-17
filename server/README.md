@@ -1,5 +1,7 @@
 # API
 
+The API is deployed on Azure at the following URL: [https://win-nerkech-api.azurewebsites.net/](https://win-nerkech-api.azurewebsites.net/)
+
 ## ENV Variables
 
 - `SECRET_KEY`: The secret key for the Django project.
@@ -8,6 +10,8 @@
 # To generate a new secret key run the following command in the terminal and copy the output.
 python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
 ```
+
+- Check the rest of the required env variables [Here](./.env.sample)
 
 ## Endpoints
 
