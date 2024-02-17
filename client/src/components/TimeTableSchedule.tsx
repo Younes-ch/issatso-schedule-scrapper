@@ -30,26 +30,37 @@ const TimeTableSchedule = ({ groupInfo }: TimeTableScheduleProps) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {Array(groupInfo?.timetable_info_json.num_rows)
-          .fill(undefined)
-          .map((_, idx) => (
-            <TableRow key={idx}>
-              {(
-                groupInfo?.timetable_info_json[`row_${idx + 1}`] as string[]
-              ).map((row: string, idx: number) => {
-                if (idx == 0)
-                  return (
-                    <TableCell
-                      key={idx}
-                      className="text-muted-foreground font-medium"
-                    >
-                      {row}
-                    </TableCell>
-                  );
-                return <TableCell key={idx}>{row}</TableCell>;
-              })}
-            </TableRow>
-          ))}
+        {groupInfo?.timetable_info_json.num_rows == 0 ? (
+          <TableRow>
+            <TableCell
+              colSpan={groupInfo?.timetable_header.length}
+              className="text-red-400"
+            >
+              No timetable available for this group.
+            </TableCell>
+          </TableRow>
+        ) : (
+          Array(groupInfo?.timetable_info_json.num_rows)
+            .fill(undefined)
+            .map((_, idx) => (
+              <TableRow key={idx}>
+                {(
+                  groupInfo?.timetable_info_json[`row_${idx + 1}`] as string[]
+                ).map((row: string, idx: number) => {
+                  if (idx == 0)
+                    return (
+                      <TableCell
+                        key={idx}
+                        className="text-muted-foreground font-medium"
+                      >
+                        {row}
+                      </TableCell>
+                    );
+                  return <TableCell key={idx}>{row}</TableCell>;
+                })}
+              </TableRow>
+            ))
+        )}
       </TableBody>
     </Table>
   );
