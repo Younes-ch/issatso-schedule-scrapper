@@ -52,7 +52,7 @@ Get all groups.
 
 #### Path Parameters
 
-- `group_name (required)`: The name of the group.
+- `group_name (required)`: The name of the group. (Possible values are the names of the groups from [/api/groups/](#get-apigroupsnames))
 
 Get a specific group.
 
@@ -178,7 +178,7 @@ Get information about Available classrooms in a specific day and session.
 
 #### Path Parameters
 
-- `classroom (required)`: The classroom name. (Should be the value of the classroom from the previous endpoint)
+- `classroom (required)`: The classroom name. (Possible values are the names of the classrooms from [/api/classrooms/](#get-apiclassrooms), the `value` field of the classroom object)
 
 Get information about the availability of a single classroom in a week.
 
