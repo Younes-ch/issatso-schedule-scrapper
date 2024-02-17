@@ -9,10 +9,8 @@ import Loader from "./Loader";
 import RemedialSchedule from "./RemedialSchedule";
 import ScrollButton from "./ScrollButton";
 import TimeTableSchedule from "./TimeTableSchedule";
-import useMediaQuery from "@/hooks/useMediaQuery";
 
 const GroupSchedules = () => {
-  const isDesktop = useMediaQuery("(min-width: 768px)");
   const selectedGroup = groupQueryStore((state) => state.selectedGroup);
   const {
     data: groupInfo,
@@ -49,30 +47,26 @@ const GroupSchedules = () => {
     <>
       <TimeTableSchedule groupInfo={groupInfo} />
       <div ref={ref} className="w-full flex justify-center">
-      <RemedialSchedule groupInfo={groupInfo} />
+        <RemedialSchedule groupInfo={groupInfo} />
       </div>
-      {isDesktop && (
-        <>
-          {entry?.isIntersecting ? (
-            <ScrollButton
-              icon={<ArrowUp />}
-              content="Scroll up to Timetable schedule"
-              onClick={() => {
-                const element = document.querySelector(".timetable-schedule");
-                element?.scrollIntoView({ behavior: "smooth" });
-              }}
-            />
-          ) : (
-            <ScrollButton
-              icon={<ArrowDown />}
-              content="Scroll down to Remedial schedule"
-              onClick={() => {
-                const element = document.querySelector(".remedial-schedule");
-                element?.scrollIntoView({ behavior: "smooth" });
-              }}
-            />
-          )}
-        </>
+      {entry?.isIntersecting ? (
+        <ScrollButton
+          icon={<ArrowUp />}
+          content="Scroll up to Timetable schedule"
+          onClick={() => {
+            const element = document.querySelector(".timetable-schedule");
+            element?.scrollIntoView({ behavior: "smooth" });
+          }}
+        />
+      ) : (
+        <ScrollButton
+          icon={<ArrowDown />}
+          content="Scroll down to Remedial schedule"
+          onClick={() => {
+            const element = document.querySelector(".remedial-schedule");
+            element?.scrollIntoView({ behavior: "smooth" });
+          }}
+        />
       )}
     </>
   );

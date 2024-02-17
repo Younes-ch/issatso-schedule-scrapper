@@ -3,6 +3,7 @@ import ClassroomAvailabilityTable from "@/components/ClassroomAvailabilityTable"
 import DaySelector from "@/components/DaySelector";
 import SessionSelector from "@/components/SessionSelector";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import useMediaQuery from "@/hooks/useMediaQuery";
 import availableClassroomsQueryStore from "@/stores/availableClassroomsQueryStore";
 import classroomQueryStore from "@/stores/classroomQueryStore";
 import colorStore from "@/stores/colorStore";
@@ -11,6 +12,7 @@ import { useScrollIntoView } from "@mantine/hooks";
 import { useEffect } from "react";
 
 const AvailableClassrooms = () => {
+  const isDesktop = useMediaQuery("(min-width: 768px)");
   const setColor = colorStore((state) => state.setColor);
   const setCursorHidden = cursorHideStore((state) => state.setCursorHidden);
   const { targetRef, scrollIntoView } = useScrollIntoView<HTMLDivElement>();
@@ -40,12 +42,16 @@ const AvailableClassrooms = () => {
   }, []);
 
   return (
-    <Card>
+    <Card className={`${!isDesktop ? "w-[90vw]" : ""}`}>
       <CardHeader>
         <CardTitle>Pick a day and session</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-5 items-center">
-        <div className="flex justify-center gap-10">
+        <div
+          className={`flex justify-center gap-5 ${
+            !isDesktop ? "flex-col" : ""
+          }`}
+        >
           <div className="w-1/2">
             <DaySelector />
           </div>

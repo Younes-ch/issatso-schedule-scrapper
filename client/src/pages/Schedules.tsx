@@ -1,12 +1,14 @@
 import GroupSchedules from "@/components/GroupSchedules";
 import GroupSelector from "@/components/GroupSelector";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import useMediaQuery from "@/hooks/useMediaQuery";
 import colorStore from "@/stores/colorStore";
 import cursorHideStore from "@/stores/cursorHideStore";
 import groupQueryStore from "@/stores/groupQueryStore";
 import { useEffect } from "react";
 
 const Schedules = () => {
+  const isDesktop = useMediaQuery("(min-width: 768px)");
   const setColor = colorStore((state) => state.setColor);
   const setCursorHidden = cursorHideStore((state) => state.setCursorHidden);
   const setSelectedGroup = groupQueryStore((state) => state.setSelectedGroup);
@@ -30,7 +32,7 @@ const Schedules = () => {
   }, []);
 
   return (
-    <Card>
+    <Card className={`${!isDesktop ? "w-[90vw]" : ""}`}>
       <CardHeader>
         <CardTitle>Choose a group</CardTitle>
       </CardHeader>
