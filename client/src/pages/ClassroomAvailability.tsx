@@ -29,7 +29,7 @@ const ClassroomAvailability = () => {
         element.removeEventListener("mouseleave", () => setCursorHidden(false));
       });
     };
-  }, [setSelectedClassroom]);
+  }, []);
 
   return (
     <>
