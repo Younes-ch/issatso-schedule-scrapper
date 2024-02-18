@@ -1,6 +1,8 @@
 import BackgroundEffect from "@/components/BackgroundEffect";
 import Cursor from "@/components/Cursor";
+import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import NavBar from "@/components/NavBar";
 import { Button } from "@/components/ui/button";
 import colorStore from "@/stores/colorStore";
 import cursorHideStore from "@/stores/cursorHideStore";
@@ -36,7 +38,8 @@ const Error = ({ header, message }: ErrorProps) => {
 
   return (
     <>
-      <div className="flex justify-center items-center min-h-screen gap-3 cursor-none">
+      <div className="flex flex-col justify-between items-center min-h-screen gap-3 cursor-none">
+        <NavBar />
         <Header>
           <h1 className="text-transparent scroll-m-20 text-2xl font-extrabold tracking-tight md:text-4xl lg:text-5xl py-2 bg-gradient-to-r from-red-600 via-red-300 to-red-600 bg-clip-text bg-200% animate-shine">
             {header}
@@ -48,6 +51,7 @@ const Error = ({ header, message }: ErrorProps) => {
             <Link to="/">Go Home</Link>
           </Button>
         </Header>
+        <Footer />
       </div>
       <BackgroundEffect />
       <Cursor />
