@@ -24,7 +24,7 @@ const ScrollButton = ({ icon, content, onClick }: ScrollButtonProps) => {
             {icon}
           </div>
         </TooltipTrigger>
-        <TooltipContent className="text-seconday-foreground">
+        <TooltipContent className="text-secondary-foreground">
           {content}
         </TooltipContent>
       </Tooltip>
