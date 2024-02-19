@@ -48,7 +48,7 @@ const AvailableClassrooms = () => {
       </CardHeader>
       <CardContent className="flex flex-col gap-5 items-center">
         <div
-          className={`flex justify-center gap-5 ${
+          className={`flex justify-center gap-5 mx-3 ${
             !isDesktop ? "flex-col" : ""
           }`}
         >
