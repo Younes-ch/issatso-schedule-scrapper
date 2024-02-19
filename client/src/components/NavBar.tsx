@@ -29,22 +29,20 @@ const NavBar = () => {
               role="button"
             />
           </DrawerTrigger>
-           <div>
-            <DrawerContent className="text-center outline-none text-sm font-medium leading-none">
-              <Separator className="my-4" />
-               <Link to="/schedules" onClick={() => setOpen(false)}>
-                Schedules
-               </Link>
-              <Separator className="my-4" />
-                <Link to="/classrooms/available" onClick={() => setOpen(false)}>
-                  Available Classrooms
-                </Link>
-              <Separator className="my-4" />
-                <Link to="/classrooms/availability" onClick={() => setOpen(false)}>
-                  Classroom availability
-                </Link>
-              <Separator className="my-4" />
-           </div>
+          <DrawerContent className="text-center outline-none text-sm font-medium leading-none">
+            <Separator className="my-4" />
+            <Link to="/schedules" onClick={() => setOpen(false)}>
+              Schedules
+            </Link>
+            <Separator className="my-4" />
+            <Link to="/classrooms/available" onClick={() => setOpen(false)}>
+              Available Classrooms
+            </Link>
+            <Separator className="my-4" />
+            <Link to="/classrooms/availability" onClick={() => setOpen(false)}>
+              Classroom availability
+            </Link>
+            <Separator className="my-4" />
           </DrawerContent>
         </Drawer>
       </div>
