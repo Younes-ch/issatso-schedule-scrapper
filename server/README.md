@@ -2,6 +2,18 @@
 
 The API is deployed on Azure at the following URL: [https://win-nerkech-api.azurewebsites.net/](https://win-nerkech-api.azurewebsites.net/)
 
+## Background Tasks
+
+The API includes an automated background task system that updates schedules daily at 2:00 AM. The background task calls the `/api/groups/update` endpoint using the `TOKEN` environment variable for authentication.
+
+### Features
+- **Automatic Updates**: Schedules are updated daily without manual intervention
+- **Error Handling**: Includes timeout and error handling for reliable operation
+- **Logging**: All task activities are logged for monitoring
+- **Manual Trigger**: Can be manually triggered using Django management commands
+
+For detailed information, see [BACKGROUND_TASKS.md](./BACKGROUND_TASKS.md)
+
 ## ENV Variables
 
 - `SECRET_KEY`: The secret key for the Django project.
@@ -11,6 +23,7 @@ The API is deployed on Azure at the following URL: [https://win-nerkech-api.azur
 python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
 ```
 
+- `TOKEN`: Your ISSATSO API token for schedule updates (required for background tasks)
 - Check the rest of the required env variables [Here](./.env.sample)
 
 ## Endpoints
