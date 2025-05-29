@@ -5,28 +5,39 @@ FROM python:3.10-alpine
 ENV PIP_DISABLE_PIP_VERSION_CHECK=1
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
-ENV DEBUG=FALSE
-ENV SECRET_KEY=$SECRET_KEY
-ENV TOKEN=$TOKEN
-ENV ISSATSO_API_URL=$ISSATSO_API_URL
-ENV PG_DATABASE=$PG_DATABASE
-ENV PG_USERNAME=$PG_USERNAME
-ENV PG_PASSWORD=$PG_PASSWORD
-ENV PG_HOST=$PG_HOST
-ENV PG_PORT=$PG_PORT
 
 # Set work directory
-WORKDIR /code
+WORKDIR /app
 
-# Install dependencies
-COPY ./requirements.txt .
-RUN pip install -r requirements.txt
+# Install system dependencies for Alpine
+RUN apk update && apk add --no-cache \
+    postgresql-dev \
+    gcc \
+    python3-dev \
+    musl-dev \
+    && rm -rf /var/cache/apk/*
 
-# Copy project
+# Install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy project files
 COPY . .
 
-#  make the script executable
+# Make entrypoint script executable
 RUN chmod +x ./entrypoint.sh
 
-# Run server
+# Create non-root user for security
+RUN adduser -D -s /bin/sh appuser && \
+    chown -R appuser:appuser /app
+USER appuser
+
+# Expose port (Azure App Service will map this)
+EXPOSE 8000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:8000/ || exit 1
+
+# Run the application
 CMD ["./entrypoint.sh"]
