@@ -63,8 +63,8 @@ def start_scheduler():
     scheduler.add_job(
         update_schedules_task,
         'cron',
-        hour=11,
-        minute=19,
+        hour=20,
+        minute=0,
         id='update_schedules_daily',
         replace_existing=True,
         max_instances=1  # Ensure only one instance of the job runs at a time
