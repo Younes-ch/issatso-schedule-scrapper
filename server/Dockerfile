@@ -15,6 +15,8 @@ RUN apk update && apk add --no-cache \
     gcc \
     python3-dev \
     musl-dev \
+    openssh \
+    wget \
     && rm -rf /var/cache/apk/*
 
 # Install Python dependencies
@@ -24,16 +26,20 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy project files
 COPY . .
 
+# Configure SSH for Azure App Service (Alpine Linux)
+COPY sshd_config /etc/ssh/
+RUN echo "root:Docker!" | chpasswd \
+    && ssh-keygen -A
+
 # Make entrypoint script executable
 RUN chmod +x ./entrypoint.sh
 
 # Create non-root user for security
 RUN adduser -D -s /bin/sh appuser && \
     chown -R appuser:appuser /app
-USER appuser
 
 # Expose port (Azure App Service will map this)
-EXPOSE 8000
+EXPOSE 8000 2222
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
