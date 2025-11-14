@@ -6,3 +6,4 @@ staticfiles
 .vercel
 logs/
 *.log
+schedule_updates.jsonl

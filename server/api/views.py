@@ -1,6 +1,9 @@
 from concurrent.futures import ThreadPoolExecutor
 import re
 import logging
+import json
+from datetime import datetime
+from pathlib import Path
 from rest_framework.response import Response
 from django.core.paginator import Paginator
 from rest_framework.decorators import api_view
@@ -9,6 +12,9 @@ from django.urls import reverse
 from .serializers import GroupSerializer
 
 logger = logging.getLogger(__name__)
+
+# Log file path
+SCHEDULE_UPDATE_LOG = Path(__file__).parent.parent / 'logs' / 'schedule_updates.jsonl'
 from .helpers import (
     BLOCS,
     CLASSROOMS,
@@ -96,23 +102,92 @@ def update_groups(request):
     if request.method == 'GET':
         authorization_header = request.headers.get('Authorization')
         
+        # Determine the source of the request
+        user_agent = request.headers.get('User-Agent', 'Unknown')
+        source = 'Unknown'
+        if 'AzureFunction' in user_agent:
+            source = 'Azure Function'
+        elif 'Postman' in user_agent:
+            source = 'Postman'
+        elif 'curl' in user_agent:
+            source = 'curl'
+        elif 'python-requests' in user_agent:
+            source = 'Python Requests'
+        else:
+            source = user_agent[:50]  # First 50 chars of user agent
+        
         if authorization_header and authorization_header == f'Bearer {TOKEN}':
+            start_time = datetime.now()
             try:
-                logger.info("Starting schedule update...")
+                logger.info(f"Starting schedule update from {source}...")
                 group_names = list(get_group_names())
                 logger.info(f"Found {len(group_names)} groups to update")
                 for group_name in group_names:
                     logger.info(f"Updating group: {group_name}")
                     update_group(group_name)
                 logger.info("Schedule update completed successfully")
-                return Response({"status": "success", "message": "Schedules updated"}, status=200)
+                
+                # Prepare success response
+                response_data = {"status": "success", "message": "Schedules updated"}
+                
+                # Log to file
+                log_entry = {
+                    'timestamp': start_time.isoformat(),
+                    'source': source,
+                    'status': 'success',
+                    'status_code': 200,
+                    'groups_updated': len(group_names),
+                    'duration_seconds': (datetime.now() - start_time).total_seconds(),
+                    'response': response_data
+                }
+                _write_log_entry(log_entry)
+                
+                return Response(response_data, status=200)
             except Exception as e:
                 logger.error(f"Error updating schedules: {str(e)}", exc_info=True)
-                return Response({"error": "Internal server error", "message": str(e)}, status=500)
+                
+                # Prepare error response
+                response_data = {"error": "Internal server error", "message": str(e)}
+                
+                # Log to file
+                log_entry = {
+                    'timestamp': start_time.isoformat(),
+                    'source': source,
+                    'status': 'error',
+                    'status_code': 500,
+                    'duration_seconds': (datetime.now() - start_time).total_seconds(),
+                    'response': response_data
+                }
+                _write_log_entry(log_entry)
+                
+                return Response(response_data, status=500)
         else:
+            # Log unauthorized attempt
+            log_entry = {
+                'timestamp': datetime.now().isoformat(),
+                'source': source,
+                'status': 'unauthorized',
+                'status_code': 401,
+                'response': {"error": "Unauthorized"}
+            }
+            _write_log_entry(log_entry)
+            
             return Response({"error": "Unauthorized"}, status=401)
     else:
         return Response({"error": "Method not allowed"}, status=405)
+
+
+def _write_log_entry(log_entry: dict):
+    """Write a log entry to the schedule updates log file."""
+    try:
+        # Ensure log directory exists
+        SCHEDULE_UPDATE_LOG.parent.mkdir(parents=True, exist_ok=True)
+        
+        # Append log entry as JSON line
+        with open(SCHEDULE_UPDATE_LOG, 'a') as f:
+            f.write(json.dumps(log_entry) + '\n')
+    except Exception as e:
+        logger.warning(f"Failed to write to log file: {str(e)}")
     
 @api_view(['GET'])
 def bloc_list(request):
