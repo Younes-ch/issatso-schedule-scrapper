@@ -9,6 +9,10 @@ echo "Starting SSH service..."
 echo "Waiting for database..."
 sleep 5
 
+# Fix ownership of app directory (needed for volume mounts in Docker)
+echo "Fixing permissions..."
+chown -R appuser:appuser /app
+
 # Switch to appuser for application commands
 echo "Switching to appuser for application..."
 

@@ -17,6 +17,7 @@ RUN apk update && apk add --no-cache \
     musl-dev \
     openssh \
     wget \
+    dos2unix \
     && rm -rf /var/cache/apk/*
 
 # Install Python dependencies
