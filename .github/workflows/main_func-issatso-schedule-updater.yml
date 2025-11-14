@@ -41,7 +41,7 @@ jobs:
       - name: Install dependencies
         run: |
           cd azure-function
-          pip install -r requirements.txt
+          pip install --target=".python_packages/lib/site-packages" -r requirements.txt
 
       # Optional: Add step to run tests here
 
