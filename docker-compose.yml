@@ -35,11 +35,23 @@ services:
       - app-network
     volumes:
       - database:/var/lib/postgresql/data
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    ports:
+      - "10000:10000"  # Blob service
+      - "10001:10001"  # Queue service
+      - "10002:10002"  # Table service
+    networks:
+      - app-network
+    volumes:
+      - azurite-data:/data
+    command: azurite --blobHost 0.0.0.0 --queueHost 0.0.0.0 --tableHost 0.0.0.0
 networks:
   app-network:
     driver: bridge
   
 volumes:
   database:
+  azurite-data:
 
     

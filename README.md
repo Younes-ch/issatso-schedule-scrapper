@@ -16,3 +16,4 @@ This repository contains an [API](./server) that fetches the schedule of the stu
 - [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
 - [Requests](https://requests.readthedocs.io/en/master/)
 - [Docker](https://www.docker.com/)
+- [Azure Functions](https://azure.microsoft.com/en-us/services/functions/)

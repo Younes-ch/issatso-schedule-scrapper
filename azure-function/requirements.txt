@@ -1,0 +1,3 @@
+# Azure Functions for Python
+azure-functions
+requests
