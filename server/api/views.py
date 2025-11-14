@@ -1,11 +1,14 @@
 from concurrent.futures import ThreadPoolExecutor
 import re
+import logging
 from rest_framework.response import Response
 from django.core.paginator import Paginator
 from rest_framework.decorators import api_view
 from issatso.models import Group
 from django.urls import reverse
 from .serializers import GroupSerializer
+
+logger = logging.getLogger(__name__)
 from .helpers import (
     BLOCS,
     CLASSROOMS,
@@ -94,11 +97,18 @@ def update_groups(request):
         authorization_header = request.headers.get('Authorization')
         
         if authorization_header and authorization_header == f'Bearer {TOKEN}':
-            group_names = get_group_names()
-            if group_names:
+            try:
+                logger.info("Starting schedule update...")
+                group_names = list(get_group_names())
+                logger.info(f"Found {len(group_names)} groups to update")
                 for group_name in group_names:
+                    logger.info(f"Updating group: {group_name}")
                     update_group(group_name)
-            return Response({"status": "success"}, status=200)
+                logger.info("Schedule update completed successfully")
+                return Response({"status": "success", "message": "Schedules updated"}, status=200)
+            except Exception as e:
+                logger.error(f"Error updating schedules: {str(e)}", exc_info=True)
+                return Response({"error": "Internal server error", "message": str(e)}, status=500)
         else:
             return Response({"error": "Unauthorized"}, status=401)
     else:
