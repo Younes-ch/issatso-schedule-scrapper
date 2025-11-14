@@ -8,6 +8,9 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'azure-function/**'
+      - '.github/workflows/main_func-issatso-schedule-updater.yml'
   workflow_dispatch:
 
 env:
