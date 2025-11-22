@@ -37,18 +37,48 @@ CLASSROOMS = {
         'M01-1', 'M01-2', 'M01-3', 'M02', 'M03', 'M04', 'M05', 'M06', 'M07', 'M08',
         'M09', 'M10', 'M11', 'M12', 'M13', 'M14', 'M15', 'M16', 'M17', 'M18-1', 'M18-2'
     }
+FALLBACK_GROUPS = [
+        "ING-A1-01", "ING-A1-02", "ING-A1-03", "ING-A1-04", "ING-A2-GL-01", "ING-A2-GL-02",
+        "ING-A2-GL-03", "ING-A2-GL-04", "ING-A3-GL-AL-01", "ING-A3-GL-AL-02", "ING-A3-GL-AL-03",
+        "ING-A3-GL-AL-04", "LEEA-A1-01", "LEEA-A1-02", "LEEA-A1-03", "LEEA-A1-04", "LEEA-A1-05",
+        "LEEA-A1-06", "LEEA-A2-AII-01", "LEEA-A2-EI-01", "LEEA-A2-SE-01", "LEEA-A2-SE-02",
+        "LEEA-A2-SE-03", "LEEA-A3-AII-01", "LEEA-A3-EI-01", "LEEA-A3-SE-01", "LEEA-A3-SE-02",
+        "LEEA-A3-SE-03", "LEM-A1-01", "LEM-A1-02", "LEM-A1-03", "LEM-A1-04", "LEM-A2-MA-01",
+        "LEM-A2-MI-01", "LEM-A3-MA-01", "LEM-A3-MI-01", "LGC-A1-01", "LGC-A1-02", "LGC-A1-03",
+        "LGC-A2-BAT-01", "LGC-A2-PC-01", "LGC-A3-BAT-01", "LGC-A3-PC-01", "LGEnerg-A1-01",
+        "LGEnerg-A1-02", "LGEnerg-A1-03", "LGEnerg-A2-01", "LGEnerg-A2-02", "LGEnerg-A3-01",
+        "LGEnerg-A3-02", "LGM-A1-01", "LGM-A1-02", "LGM-A2-CPI-01", "LGM-A2-CPI-02",
+        "LGM-A3-CPI-01", "LGM-A3-CPI-02", "LISI-A1-01", "LISI-A1-02", "LISI-A1-03",
+        "LISI-A2-01", "LISI-A2-02", "LISI-A3-01", "LISI-A3-02", "LSI-A1-01",
+        "LSI-A1-02", "LSI-A1-03", "LSI-A2-01", "LSI-A2-02", "LSI-A3-01",
+        "LSI-A3-02", "LSI-A3-03", "MP-GM-A1-01", "MP-GM-A2-GPPM-01", "MP-GM-A2-PAI-01",
+        "MP-MERE-A1-01", "MP-MERE-A1-01", "MP-MERE-A2-EEB-01", "MR-GM-A1-01",
+        "MR-GM-A2-MM-01", "MR-GM-A2-SM-01", "MR-MSEE-A2-MDEP-01", "MR-MSEE-A2-MSE-01",
+        "MR-MSEE-A2-SEE-01", "MR-SPI-A1-01", "MR-SPI-A2-01", "Prepa-A1-01", "Prepa-A1-02",
+        "Prepa-A1-03", "Prepa-A1-04", "Prepa-A2-01", "Prepa-A2-02", "MP-MERE-A1-EEB-01",
+        "MP-MERE-A1-EEI-01", "LISI-A2-03", "MP-MERE-A2-EEI-01", "LGC-A2-BAT-02",
+        "Prepa-A1-05", "LGM-A1-03", "Prepa-A2-03", "LISI-A3-03", "LGC-A1-04", "MR-MSEE-A1-02",
+        "MR-MSEE-A1-01"
+    ]
 BLOCS = {classroom[0] for classroom in CLASSROOMS}
 TIMETABLE_HEADER = ["Jours", "Début", "Fin", "Matière", "Enseignant", "Type", "Salle", "Régime"]
 REMEDIAL_HEADER = ["Jour", "Date", "Séance", "Matière", "Enseignant", "Salle", "Type"]
 
 def get_group_names():
-    response = requests.get(ISSATSO_GROUP_NAMES_URL, headers=headers)
-    if response.status_code == 200:
-        for group in response.json():
-            if group['designation'] != "GroupeTD":
-                yield group['designation']
-    else:
-        return None
+    try:
+        response = requests.get(ISSATSO_GROUP_NAMES_URL, headers=headers, timeout=5)
+    
+        if response.status_code == 200:
+            return [
+                group['designation'] 
+                for group in response.json() 
+                if group.get('designation') != "GroupeTD"
+            ]
+    except requests.exceptions.RequestException:
+        pass
+    
+    return FALLBACK_GROUPS
+        
     
 def get_group_timetable(group_name) -> str | None:
     response = requests.get(ISSATSO_TIMETABLE_URL + group_name, headers=headers)
